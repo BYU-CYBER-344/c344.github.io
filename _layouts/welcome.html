@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ page.title }}</title>
+    <link rel="stylesheet" type="text/css" media="all" href="/res/welcome.css" />
+    <link rel="icon" type="image/x-icon" href="/res/favicon.ico">
+<style>
+
+    :root {
+        background-color: black;
+        font-size: 16pt;
+    }
+
+    html {
+        height: 100%;
+    }
+
+    body {
+        min-width: 133vh;
+        max-width: 140vh;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 0.1in 1fr;
+        grid-template-rows: 16rem 1fr;
+        grid-template-areas: 'hd brdr ann' 'gr brdr ann';
+        height: 100%;
+    }
+
+    .header {
+        height: 100%;
+        display: block flex;
+        flex-direction: column;
+        justify-content: center; /* vertical */
+        align-items: center;
+    }
+
+    aside {
+        grid-area: gr;
+        height: 100%;
+        padding: 0 0.5em;
+    }
+
+    main {
+        grid-area: ann;
+        margin: auto 0;
+        padding: 1em;
+    }
+
+    .vertborder {
+        grid-area: brdr;
+        background-image: linear-gradient(white, #808080, #808080, white);
+        flex: 0 0 0.1in;
+    }
+
+    .title {
+        margin: 0 0 0.3em 0;
+        font-size: 2.2rem;
+    }
+
+    .countdown {
+        margin: 0.5rem auto 0 auto;
+        font-family: Consolas, fixed;
+        font-size: 2em;
+        color: white;
+        text-align: center;
+        width: 7em;
+        background-color: black;
+    }
+
+    #quiz {
+        margin: 0 auto;
+        border: 2px solid black;
+        padding: 0.2em;
+    }
+
+    #quiz ul {
+        margin: 0 0 0 1.5em;
+    }
+
+    #quizpw {
+        font-size: 1.5em;
+    }
+
+    .disappear {
+        display: none;
+    }
+
+    main ul {
+        margin-left: 0.5em;
+    }
+
+    main ul>li>ul {
+        margin-bottom: 0;
+    }
+
+    aside img {
+        display: block;
+        width: 100%;
+        max-height: calc(100vh - 20rem);
+        object-fit: contain;
+        margin: 1em auto 0 auto;
+    }
+
+    main img {
+        display: block;
+        max-width: 100%;
+        max-height: 25em;
+        margin: 1em auto 0 auto;
+    }
+
+    .imgcredit {
+        display: block;
+        font-size: 0.5em;
+    }
+</style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="title">{{ page.title }}</div>
+        <div class="subtitle">{{ page.course }} - {{ page.session }}</div>
+        <div class="countdown disappear" id="countdown" onclick="startCountdown()">&nbsp;</div>
+        {% if page.quiz %}
+        <div class="disappear" id="quiz">
+            <div>Quiz</div>
+            <ul>
+                <li>{% if page.quizminutes %}{{ page.quizminutes }}{% else %}10{% endif %} Minutes (though you can continue after we start the lecture)</li>
+                <li>Closed book, closed internet, closed notes, closed neighbor, etc.</li>
+            </ul>
+            <div style="position: relative; text-align: center;">
+                <div style="position:absolute; top: 0; left: 0;">Password:</div>
+                <span id="quizpw"></span>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="vertborder">
+    </div>
+    {% if page.image %}
+    <aside>
+        <img class="col1img" src="{{ page.image }}" />
+        {% if page.imgcredit %}
+        <div class="imgcredit">{{ page.imgcredit }}</div>
+        {% endif %}
+    </aside>
+    <main>
+        <h2>Announcements:</h2>
+        {{ content }}
+    </main>
+    {% else %}
+    {{ content }}
+    {% endif %}
+
+    <script>
+
+        let eleCountdown = document.getElementById("countdown");
+        let timer;
+        let sounded = false;
+
+        const offset = 0; //(Date.now() % 3600000)+10000; // for testing
+
+        function tick()
+        {
+            let remaining = Math.floor((3600000 - ((Date.now()-offset) % 3600000)) / 100);
+            const tenths = remaining % 10;
+            remaining = (remaining - tenths) / 10
+            const seconds = remaining % 60;
+            const minutes = (remaining - seconds) / 60;
+            if (remaining < 2400) // 40 minutes
+            {
+                eleCountdown.textContent = minutes.toString().padStart(2,'0') + ":" + seconds.toString().padStart(2,'0') + "." + tenths.toString();
+            }
+            else if (!sounded) {
+                sounded = true;
+                eleCountdown.textContent = "00:00.0";
+                let sound = new Audio('/res/timpani.mp3');
+                sound.play();
+                if (timer) {
+                    clearInterval(timer);
+                    timer = null;
+                }                
+            }
+        }
+
+        function toggleCountdown() {
+            let eleCountdown = document.getElementById("countdown");
+            if (eleCountdown.classList.contains("disappear")) {
+                document.getElementById("quiz")?.classList.add("disappear");
+                eleCountdown.classList.remove("disappear");
+                timer = window.setInterval(tick, 100);
+            }
+            else {
+                eleCountdown.classList.add("disappear");
+                if (timer) {
+                    clearInterval(timer);
+                    timer = null;
+                }
+            }
+        }
+
+        function toggleQuiz() {
+            let eleQuiz = document.getElementById("quiz");
+            if (!eleQuiz) return;
+            if (eleQuiz.classList.contains("disappear")) {
+                document.getElementById("countdown")?.classList.add("disappear");
+                if (timer) {
+                    clearInterval(timer);
+                    timer = null;
+                }
+                eleQuiz.classList.remove("disappear");
+            }
+            else {
+                eleQuiz.classList.add("disappear");
+            }
+        }
+
+        function onKeyDown(e)
+        {
+            if (e.keyCode == 81) { // Letter Q
+                toggleQuiz();
+            }
+            else if (e.keyCode == 82) { // Letter R
+                toggleCountdown();
+            }
+        }
+
+        document.addEventListener('keydown', onKeyDown);
+
+        {% if page.quiz %}
+
+        function getQuizPw() {
+            let quizPw = null;
+            try {
+                const quizKey = "{{ page.quiz }}";
+                const quizIndex = Number(quizKey);
+                if (Number.isNaN(quizIndex)) {
+                    quizPw = quizKey;
+                }
+                else {
+                    const passwordsRaw = localStorage.getItem("passwords");
+                    if (!passwordsRaw) {
+                        quizPw = "ctf210{welcome-" + quizKey + "}";
+                    }
+                    else {
+                        const passwords = JSON.parse(passwordsRaw)?.passwords;
+                        quizPw = passwords[quizIndex];
+                    }
+                }
+            }
+            catch (err) {
+                console.error(err);
+            }
+            if (quizPw) {
+                document.getElementById("quizpw").textContent = quizPw;
+            }
+        }
+
+        window.addEventListener("load", getQuizPw);
+
+        {% endif %}
+
+</script>
+
+</body>
+
+</html>

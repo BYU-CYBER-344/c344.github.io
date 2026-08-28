@@ -1,0 +1,45 @@
+timezone: America/Denver
+encoding: utf-8
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+exclude:
+  - README.md
+  - LICENSE
+  - docker-compose.yml
+  - .gitignore
+  - .sass-cache/
+  - .jekyll-cache/
+  - template-bare.html
+  - template-layout.html
+  - template.md
+  - .vs/
+
+defaults:
+  -
+    scope:
+      path: ""
+    values:
+      layout: "default"
+  -
+    scope:
+      path: ""
+      type: "welcome"
+    values:
+      layout: "welcome"
+      course: "IT&C 210"
+      quizminutes: 2
+  -
+    scope:
+      path: "slides/*.pptx"
+    values:
+      viewer: ppt
+collections:
+  welcome:
+    output: true
+    permalink: /welcome/:path.html
+
+sass:
+  sass_dir: _sass
+  
