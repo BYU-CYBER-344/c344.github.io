@@ -93,7 +93,7 @@ Do the following:
 > On the docker run command, `--rm` tells docker to remove the stopped container when you exit. `-it` runs the container in interactive-terminal mode which lets you interact with a running container.
 > If you want to waste a bunch of time and see what games were like before computer graphics, try `erezbinyamin/sst` or `matsuu/nethack`.
 
-## Writeup and Submission
+## Writeup and Submission {#submission}
 
 To complete this homework, you will write up what you did and submit it **in PDF format** to LearningSuite.
 It **MUST** have screenshots as evidence of your work.
@@ -194,3 +194,36 @@ So, while this is an acceptable option, it is not preferred.
 
 * Ask Prof. Redd to invite you to the AWS Academy Learner Lab.
 * Once you have accepted the invitation, follow [these instructions from CYBER 210 to create an Ubuntu EC2 instance.](https://byu-itc-210.github.io/AWS-Server-Setup).
+
+## Container Host Options
+
+There are fewer options for container hosts. And if you still have your setup from CYBER 210 you can just use that.
+
+### Docker Desktop running on a lab computer.
+Docker Desktop is already installed on the lab computers. All you need to do is launch Docker Desktop and then go to the command-line to launch a container.
+
+### Docker Desktop for Windows running on your own computer.
+Use [these instructions from CYBER 210 to install WSL2 and Docker Desktop](https://byu-itc-210.github.io/InstallWsl2AndDocker).
+
+### Docker Desktop for MacOS running on your own computer.
+Use [these instructions install Docker Desktop on macOS](https://docs.docker.com/desktop/setup/install/mac-install/).
+
+### Docker Desktop for Linux running on your own computer.
+Use [these instructions to install Docker Desktop on Linux](https://docs.docker.com/desktop/setup/install/linux/).
+
+### Docker Desktop for Linux running on your Ubuntu VM.
+This is only useful if you want to carry your Docker environment with you between computers. For example, you might do this if you are using VMware on lab machines and keeping your VMs on a thumb drive. Even then, there's no real advantage since Docker is also running on those computers. Nevertheless, including this for completeness.
+
+After choosing a Hypervisor and installing Ubuntu in a VM, then follow the instructions immediately above to install Docker Desktop on that VM.
+
+### Microsoft WSL Containers (New and untested by your instructor or TAs)
+Microsoft now supports Linux containers directly in Windows without needing Docker desktop. [Installation instructions are here.](https://learn.microsoft.com/en-us/windows/wsl/tutorials/wsl-containers). This is simpler and built into windows as compared to Docker Desktop. However, the command lines we give in these instructions and in the labs and homework assume docker desktop so you may have to adapt to the new platform. Also, it does not support any equivalent of `docker compose`.
+
+### Podman for Linux
+PodMan is a Simpler and more secure open source alternative to Docker Desktop.
+[You can install it from here](https://podman.io/).
+However, the command lines we give in these instructions and in the labs and homework assume docker desktop so you may have to adapt to the alternative platform. For the equivalent of `docker compose` you must install `podman-compose`.
+
+## Submitting Your Assignment
+
+Submission instructions are [here](#submission), right before the installation options.
