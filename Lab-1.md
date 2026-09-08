@@ -114,7 +114,6 @@ traceroute www.byu.edu
 Max 20 or 30 points.
 
 * Install React OS
-* Add a GUI to Arch Linux
 * Create a custom Windows installer (may be combined with the regular Windows installation)
 * Install Arch Linux using the manual steps in the [Arch Installation Guide](https://wiki.archlinux.org/title/Installation_guide)
 * Install macOS in a VM
