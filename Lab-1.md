@@ -2,10 +2,7 @@
 title: "Lab 1: Hypervisors and Operating Systems"
 ---
 
->These are preliminary instructions. In this lab you will install two operating systems on virtual machines. One will be a version of Windows that you choose. The other will be Arch Linux. Your submission will be a writeup answering specific questions about each installation.
->These preliminary instructions tell how to do the installations which is enough to get you started. The balance of the instructions will be added by end-of-day on Tuesday, September 8.
-
-Contemporary operating systems share many similarities and a few important differences. Linux, macOS, Android, and BSD all share a common [Unix](https://en.wikipedia.org/wiki/Unix) heritage. Linux, in turn, has numerous distributions. [See this interactive graphic](https://rreinold.github.io/explore-linux/) for one visualization of the of the Linux family tree. [Linux](https://www.linux.org/) is an open-source operating system Kernel. Most distributions combine it with [GNU](https://www.gnu.org) open source tools [GNU Coreutils](https://www.gnu.org/software/coreutils) and [Bash](https://www.gnu.org/software/bash). It also relies on the excellent [GNU C/C++](https://gcc.gnu.org) compiler and associated libraries.
+Contemporary operating systems share many similarities and a few important differences. Linux, macOS, Android, and BSD all share a common [Unix](https://en.wikipedia.org/wiki/Unix) heritage. Linux, in turn, has numerous distributions. [See this interactive graphic](https://rreinold.github.io/explore-linux/) for one visualization of the of the Linux family tree. [Linux](https://www.linux.org/) is an open-source operating system Kernel. Most distributions combine it with [GNU](https://www.gnu.org) open source tools: [GNU Coreutils](https://www.gnu.org/software/coreutils) and [Bash](https://www.gnu.org/software/bash). It also relies on the excellent [GNU C/C++](https://gcc.gnu.org) compiler and associated libraries.
 
 [macOS](https://en.wikipedia.org/wiki/MacOS) is built and managed by Apple for their Mac computers. The kernel is [Darwin](https://en.wikipedia.org/wiki/Darwin_(operating_system)) which is derived from [Mach](https://en.wikipedia.org/wiki/Mach_(kernel)), another Unix-like operating system. While Darwin is open source due to being derived from prior open source projects, Apple layers many proprietary features into macOS. Due to the close binding between macOS and Apple hardware, it is difficult (but [not impossible](https://www.digitalcitizen.life/how-to-use-macos-on-a-windows-pc-using-a-virtual-machine/)) to load macOS into a virtual machine.
 
@@ -22,7 +19,7 @@ Even though Windows 10 is in limited support and earlier versions are out of sup
 
 Tips:
 * Recent versions of Windows make you create a Microsoft account during installation. If you leave your VM disconnected from the internet during installation you can usually bypass that requirement. Look online for the latest tips related to installing Windows without a Microsoft account.
-* You do not need to activate your Windows installation. You will just run in non-activated mode.
+* You do not need to activate your Windows installation. For this lab, you will just run in non-activated mode.
 
 Here are some options:
 * Windows 11: [Download Windows 11](https://www.microsoft.com/en-us/software-download/windows11) Choose the ISO for x64 devices.
@@ -117,13 +114,13 @@ With the minimal install, you are limited to a CLI (Command Line Interface) and 
 In this step, you wil add a GUI (Graphical User Interface) and a wab browser.
 We will use [GNOME](https://www.gnome.org/), a full graphical shell that is the default UI on Ubuntu, Fedora, and other graphically-oriented distributions. The standard GNOME distribution includes the chromium web browser and it uses the [Wayland](https://wayland.freedesktop.org/) graphics protocol by default.
 
-Install GNOME. The first command, `sudo pacman -Syu` ensures that your system is up to date. The second command installs GNOME, ghe
+Install GNOME. The first command, `sudo pacman -Syu` ensures that your system is up to date. The second command installs GNOME, GDM (GNOME Display Manager), and a graphical network manager.
 ```sh
 sudo pacman -Syu
 sudo pacman -S gnome gdm networkmanager
 ```
 
-Once you have done that, you need to enable the network manager and GDM. The second command will not only enable GDM but it will launch the GNOME environment. In future reboots
+Once you have done that, you need to enable the network manager and GDM. The second command will not only enable GDM but it will launch the GNOME environment. In future reboots it will also automatically enter the graphical environment.
 ```sh
 sudo systemctl enable --now NetworkManager
 sudo systemctl enable --now gdm
@@ -143,7 +140,7 @@ Explore the graphical applications included in GNOME. The web browser (called "w
 
 ## Submission
 
-Your submission is through the "Record an OS for Lab-1" links that you used on each of the operating systems. You can verify your submission by clicking on the `View my Lab-1 Report` link in the Lab 1 assignment in LearningSuite. You should have two entries there. One for a version of Windows and one for Arch Linux. Be sure that both are there and that you name which version of Windows you installed.
+Your submission is through the `Record an OS for Lab-1` links that you used on each of the operating systems. You can verify your submission by clicking on the `View my Lab-1 Report` link in the Lab 1 assignment in LearningSuite. You should have two entries there. One for a version of Windows and one for Arch Linux. Be sure that both are there and that you name which version of Windows you installed.
 
 You cannot delete records. But if one is not what you wanted or expected, you can submit another and we will grade the best versions.
 
@@ -161,7 +158,7 @@ Max 40 extra credit on this lab. You may do extra credit work at any time during
 
 ### [20 Points] Create a Custom Windows Installer
 
-Due to the advertising and application bloat bundled with Windows, there are several efforts to create trimmed-down versions of the Windows installer. Consider [Bla bla bla](), [Tiny 11](), or a similar project. Use it to customize your Windows installer, install on a VM. In your email, describe what you used, what you did, and what you learned.
+Due to the advertising and application bloat bundled with Windows, there are several efforts to create trimmed-down versions of the Windows installer. Consider [NTLite](https://ntlite.com/), [Tiny 11](https://github.com/ntdevlabs/tiny11builder), or a similar project. Use it to customize your Windows installer, install on a VM. In your email, describe what you used, what you did, and what you learned.
 
 ### [20 Points] Install Arch Linux Manually
 
