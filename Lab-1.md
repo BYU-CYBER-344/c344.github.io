@@ -36,15 +36,23 @@ Here are some options:
 2. Install Windows on a VM using the hypervisor you chose in Homework 1
 3. During the installation, pick options that make sense to you.
 
-Explore the features of the version of Windows you installed. In the submission instructions below you will use this installation to answer questions about your Windows configuration.
+Explore the features of the version of Windows you installed.
 
-**(Additional instructions coming by end-of-day Tuesday.)**
+### Record Your Success
+* *In the Edge web browser included with your new Windows installation* open LearningSuite and log in.
+* Under **Assignments** or in the **Schedule** open Lab 1.
+* Click `Record an OS for Lab-1`
+* Enter the name of the Windows operating system you installed
+* Click `Submit`
+
+> **Important** You must record using a web browser in the operating system you just installed. We will use the User-Agent string and IP address to validate that you are running under a new VM. You will repeat this with the Arch Linux OS and will have at least two records in your report.
+> From any web browser you can select `View my Lab-1 Report` to see all of the OS records you have reported.
 
 ## Installing Arch Linux
 
 Arch Linux is a "lightweight and flexible Linux distribution that tries to Keep It Simple."
 Even their [official website](https://archlinux.org/) is bare bones.
-You have to already know what's going on to understand what's happening there.
+You need to already know what's going on to understand what's happening there.
 Here's a primer:
 
 * The [Downloads Page](https://archlinux.org/download/) is where you will find Arch installers. Unless you already use BitTorrent, go to the HTTP Direct Downloads area and choose one of the mirrors as your download source.
@@ -96,27 +104,72 @@ Try a few commands in Arch such the following:
 * `curl https://echo.dicax.org`
 
 Install traceroute and trace your route to `www.byu.edu`.
-```
+```sh
 pacman -S traceroute
 traceroute www.byu.edu
 ```
 
-### Add a GUI to Arch
+If your hypervisor supports checkpoints, now is a good time power off your VM and save a checkpoint. That way you can return to this state if you ever need to.
 
-**(Instructions for this step coming by end-of-day Tuesday!)**
+### Add a GUI and Browser to Arch
+
+With the minimal install, you are limited to a CLI (Command Line Interface) and to CLI applications.
+In this step, you wil add a GUI (Graphical User Interface) and a wab browser.
+We will use [GNOME](https://www.gnome.org/), a full graphical shell that is the default UI on Ubuntu, Fedora, and other graphically-oriented distributions. The standard GNOME distribution includes the chromium web browser and it uses the [Wayland](https://wayland.freedesktop.org/) graphics protocol by default.
+
+Install GNOME. The first command, `sudo pacman -Syu` ensures that your system is up to date. The second command installs GNOME, ghe
+```sh
+sudo pacman -Syu
+sudo pacman -S gnome gdm networkmanager
+```
+
+Once you have done that, you need to enable the network manager and GDM. The second command will not only enable GDM but it will launch the GNOME environment. In future reboots
+```sh
+sudo systemctl enable --now NetworkManager
+sudo systemctl enable --now gdm
+```
+
+Explore the graphical applications included in GNOME. The web browser (called "web") is Epiphany and is based on WebKit.
+
+### Record Your Success
+* *In the Web browser included with your new Arch/GNOME installation* open LearningSuite and log in.
+* Under **Assignments** or in the **Schedule** open Lab 1.
+* Click `Record an OS for Lab-1`
+* Enter `Arch Linux` for the name of the operating system.
+* Click `Submit`
+
+> **Important** You must record using a web browser in the operating system you just installed. We will use the User-Agent string and IP address to validate that you are running under a new VM.
+> From any web browser you can select `View my Lab-1 report` to see all of the OS records you have reported.
 
 ## Submission
 
-**(Submission will be a .PDF writeup answering specific questions about your Windows and Arch installations. Those questions and point allocations coming by end-of-day Tuesday.)**
+Your submission is through the "Record an OS for Lab-1" links that you used on each of the operating systems. You can verify your submission by clicking on the `View y Lab-1 report` link in the Lab 1 assignment in LearningSuite. You should have two entries there. One for a version of Windows and one for Arch Linux. Be sure that both are there and that you name which version of Windows you installed.
+
+You cannot delete records. But if one is not what you wanted or expected, you can submit another and we will grade the best versions.
+
+### Points
+* 20 Points: Install a version of Windows. Explore the features and submit an online report.
+* 40 Points: Install Arch Linux with the GNOME GUI and web browser. Explore the features and submit an online report.
 
 ## Extra Credit
 
-Max 20 or 30 points.
+Max 40 extra credit on this lab. You may do extra credit work at any time during the semester. Report extra credit work via email to [brandt.redd@byu.edu](mailto:brandt.redd@byu.edu).
 
-* Install React OS
-* Create a custom Windows installer (may be combined with the regular Windows installation)
-* Install Arch Linux using the manual steps in the [Arch Installation Guide](https://wiki.archlinux.org/title/Installation_guide)
-* Install macOS in a VM
+### [20 Points] Install React OS
+
+[React OS](https://reactos.org/) is an open source clone of Microsoft Windows. With more than 25 years of development it is still considered to be Alpha. It targets compatibility with Windows Server 2003 and later. The UX is presently modeled on that version. Browse to the [React OS](https://reactos.org/) and download the installer. Unpack the zip to get a .ISO file. Install it on a VM and try it out. Use screenshots as evidence of your success.
+
+### [20 Points] Create a Custom Windows Installer
+
+Due to the advertising and application bloat bundled with Windows, there are several efforts to create trimmed-down versions of the Windows installer. Consider [Bla bla bla](), [Tiny 11](), or a similar project. Use it to customize your Windows installer, install on a VM. In your email, describe what you used, what you did, and what you learned.
+
+### [20 Points] Install Arch Linux Manually
+
+In our instructions above, we recommended using the `archinstall` automated tool. Instead of that, follow the manual steps in the [Arch Installation Guide](https://wiki.archlinux.org/title/Installation_guide) to install on a VM. This includes manually partitioning and formatting the hard drive, installing the bootloader, and installing the operating system. Capture some screenshots along the way as evidence of your work.
+
+### [20 Points] Install macOS in a VM
+
+macOS is not typically run in a VM. Do it anyway. Follow a guide such as [this one](https://www.digitalcitizen.life/how-to-use-macos-on-a-windows-pc-using-a-virtual-machine/) to help you on your quest. Use screenshots to as evidence of your success.
 
 
 
