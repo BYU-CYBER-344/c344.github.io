@@ -18,7 +18,7 @@ In Homework 1 you chose a Hypervisor platform and installed Ubuntu Linux. In thi
 For this step you will choose a version of Windows to install. If you already run Windows on your personal computer then you may want to choose a different version to get a feel for other versions are like. If you are principally on macOS, you might choose a contemporary version of Windows to get a feel for what some of your peers run.
 
 
-Even though Windows 10 is in limited support and earlier versions are out of support, there are still official download sites for the following versions of windows. Regardless of version, you will need a .ISO file for installation. Generally, that means downloading and running the Microsoft Media Creation tool. If you are running macOS, you may have to run the media creation tool on a lab computer and then transfer the .ISO to your host.
+Even though Windows 10 is in limited support and earlier versions are out of support, there are still official download sites for the following versions of Windows. Regardless of version, you will need a .ISO file for installation. Generally, that means downloading and running the Microsoft Media Creation tool. If you are running macOS, you may have to run the media creation tool on a lab computer and then transfer the .ISO to your host.
 
 Tips:
 * Recent versions of Windows make you create a Microsoft account during installation. If you leave your VM disconnected from the internet during installation you can usually bypass that requirement. Look online for the latest tips related to installing Windows without a Microsoft account.
@@ -139,11 +139,11 @@ Explore the graphical applications included in GNOME. The web browser (called "w
 * Click `Submit`
 
 > **Important** You must record using a web browser in the operating system you just installed. We will use the User-Agent string and IP address to validate that you are running under a new VM.
-> From any web browser you can select `View my Lab-1 report` to see all of the OS records you have reported.
+> From any web browser you can select `View my Lab-1 Report` to see all of the OS records you have reported.
 
 ## Submission
 
-Your submission is through the "Record an OS for Lab-1" links that you used on each of the operating systems. You can verify your submission by clicking on the `View y Lab-1 report` link in the Lab 1 assignment in LearningSuite. You should have two entries there. One for a version of Windows and one for Arch Linux. Be sure that both are there and that you name which version of Windows you installed.
+Your submission is through the "Record an OS for Lab-1" links that you used on each of the operating systems. You can verify your submission by clicking on the `View my Lab-1 Report` link in the Lab 1 assignment in LearningSuite. You should have two entries there. One for a version of Windows and one for Arch Linux. Be sure that both are there and that you name which version of Windows you installed.
 
 You cannot delete records. But if one is not what you wanted or expected, you can submit another and we will grade the best versions.
 
