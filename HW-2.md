@@ -1,5 +1,5 @@
 ---
-title: "HW 2: Dockerhub"
+title: "HW 2: Docker"
 ---
 In class, we took a simple website, hosted it using a container, then created a new container image that combined the server with the site, and then saved that image. The first part of this homework is to reproduce those steps on your own. The second part is to experiment with a few prebuilt container images from DockerHub.
 
@@ -209,8 +209,8 @@ Also look at the variants that are published for certain images.
 To submit this homework assignment, open the Homework 2 assignment/exam in LearningSuite and **answer the questions there.**
 
 For convenience here are what the questions will be:
-* [5 Points] Did you launch a working website using `docker run` (yes/no)?
-* [5 Points] Did you launch a working website using `docker compose` (yes/no)?
-* [5 Points] Did you create a **custom container image** and launch it to create a working website (yes/no)?
+* [5 Points] Did you launch a working web server using `docker run` (yes/no)?
+* [5 Points] Did you launch a working web server using `docker compose` (yes/no)?
+* [5 Points] Did you create a **custom container image** and launch it to create a working web server (yes/no)?
 * [5 Points] Paste in the token that appears at the bottom of the web page after you enter a name. This may be from any of the three launch methods.
 * [10 Points] Name three Docker images that you launched from **Docker Hub**.
