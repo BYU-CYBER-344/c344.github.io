@@ -8,12 +8,14 @@ exclude:
   - README.md
   - LICENSE
   - docker-compose.yml
+  - _site/
   - .gitignore
   - .sass-cache/
   - .jekyll-cache/
   - template-bare.html
   - template-layout.html
   - template.md
+  - Dockerfile
   - .vs/
 
 defaults:
