@@ -57,13 +57,13 @@ The [BYU CYBER 344](https://c344.byucyber.net/map) website, *including these lab
 
 ## Part 2: Create a new docker image that bundles httpd with the CYBER 344 site.
 
-For this step, you should use the [Homework 2](HW-2) instructions as a reference. Be sure to check details about patching the `httpd.conf` file and the tips before starting. They will save you headaches.
+For this step, you should use the [Homework 2](HW-2) instructions as a reference. Be sure to check the tips before starting. They will save you headaches.
 
 1. Create a **Dockerfile** for your new image.
-    * Put this in some directory **other** than the Jekyll source.
+    * Put this in some directory *other* than the Jekyll source.
     * It should use `httpd:latest` as its `FROM` source.
     * The website contents should come from the `_site` you created at the end of Part 1
-    * In the Apache configuration file, `httpd.conf`, you must add the MultiViews option. (See below.)
+    * You must patch the Apache configuration file, `httpd.conf` as described below.
 2. Build the new image. The **tag** for the image should be `c344`.
 3. Run the image and browse the website. Make sure it works properly.
 4. Export the image to a .tar file.
