@@ -45,7 +45,7 @@ The [BYU CYBER 344](https://c344.byucyber.net/map) website, *including these lab
     * It should appear at [http://localhost:8080/mylab](http://localhost:8080/mylab).
 5. Exit the local server.
 6. Build a the static version of the website using the `jekyll build` command as described in the **Jekyll Docker Readme**.
-7. Review the generated site. It should appear in the `_site` subdirectory.
+7. Review the generated static site. It should appear in the `_site` subdirectory.
 
 ### Tips for Part 1
 
@@ -57,13 +57,13 @@ The [BYU CYBER 344](https://c344.byucyber.net/map) website, *including these lab
 
 ## Part 2: Create a new docker image that bundles httpd with the CYBER 344 site.
 
-For this step, you should use the [Homework 2](HW-2) instructions as a reference.
+For this step, you should use the [Homework 2](HW-2) instructions as a reference. Be sure to check details about patching the `httpd.conf` file and the tips before starting. They will save you headaches.
 
 1. Create a **Dockerfile** for your new image.
     * Put this in some directory **other** than the Jekyll source.
     * It should use `httpd:latest` as its `FROM` source.
     * The website contents should come from the `_site` you created at the end of Part 1
-    * In the Apache configuration file, `httpd.conf` you must add the MultiViews option. (See below)
+    * In the Apache configuration file, `httpd.conf`, you must add the MultiViews option. (See below.)
 2. Build the new image. The **tag** for the image should be `c344`.
 3. Run the image and browse the website. Make sure it works properly.
 4. Export the image to a .tar file.
@@ -71,13 +71,13 @@ For this step, you should use the [Homework 2](HW-2) instructions as a reference
 
 ### Patching the httpd.conf file
 
-When GitHub pages gets a bare name in the path like `/about`, it will return a found `about.html`. The class website depends on that substitution. To gain the equivalent behavior on **httpd** you need to make two changes to the `httpd.conf` Apache configuration file.
+When GitHub pages gets a bare name in the URL like `/about`, it will add the `.html` suffix. The class website depends on that substitution. To gain the equivalent behavior on **httpd** you need to make two changes to the `httpd.conf` Apache configuration file.
 
 <div>Change this line:</div>
 ```
 #LoadModule negotiation_module modules/mod_negotiation.so
 ```
-<div>to this:</div>
+<div>to this: (just remove the comment)</div>
 ```
 LoadModule negotiation_module modules/mod_negotiation.so
 ```
@@ -91,7 +91,9 @@ LoadModule negotiation_module modules/mod_negotiation.so
     Options FollowSymLinks MultiViews
 ```
 
-The patches to httpd.conf needs to happen in your Dockerfile. There are a couple of ways to accomplish that.
+The first change enables the *negotiation* module which is used by `MultiViews`. The second change removes directory browsing (Indexes) and enables adding extensions like `.html`.
+
+Your Dockerfile needs to make those patches in addition to bringing in the website.
 
 **Method 1: Export, edit, and replace the file.**
 
@@ -107,22 +109,22 @@ COPY ./httpd.conf /usr/local/apache2/conf/httpd.conf
 
 **Method 2: Use sed to patch the file in place**
 
-The Dockerfile 'RUN' command can execute arbitrary Bash commands with the image. By using `RUN` with `set` and some appropriate regular expressions you can patch the file in place.
+The Dockerfile 'RUN' command can execute arbitrary Bash commands within the image. By using `RUN` with `sed` and some appropriate regular expressions you can patch the file in place.
 
 ### Part 2 Tips
 
 * Make sure that the tag of your new image is `c344`
-* `docker build` can only reference files that are in the directory tree where it finds `Dockerfile`. So, to avoid including your `Dockerfile` and edited `httpd.conf` in your site, you need to either place those files in a parent directory of your repo (awkward) or copy the `_site` directory over to the directory where you will run `docker build`.
+* `docker build` can only reference files that are in the directory tree below where it finds `Dockerfile`. So, to avoid including your `Dockerfile` and edited `httpd.conf` in your site, you need to either place those files in a parent directory of your repo (awkward) or copy the `_site` directory over to the directory where you will run `docker build`.
 * If you choose to use the `RUN sed` option for patching `httpd.conf`, consider asking AI to help you compose the appropriate commands.
 * After building your new image, you can use the following command to verify that your patches are in place: `docker run --rm c344 cat /usr/local/apache2/conf/httpd.conf`
 
 ## Submission and Grading
 
-Submit this lab by uploading your container image `.tar` file to LearningSuite under the Lab 2 assignment.<br/>(Yes, the file will be big, in the neighborhood of 45MiB. But LearningSuite should accept it.)
+Submit this lab by uploading your container image `.tar` file to LearningSuite under the **Lab 2** assignment.<br/>(Yes, the file will be big, in the neighborhood of 45MiB. But LearningSuite should accept it.)
 
 ### Scoring:
-* [10 points] The tag of the image is `c344` (The filename can be anything with a '.tar' extension).
-* [10 points] The image that loads and serves a web site.<br>(It should work with no more than `docker run --rm -p 8080:80 c344`)
+* [10 points] The **tag** of the image is `c344` (The filename can be anything with a '.tar' extension).
+* [10 points] The image loads and serves a web site.<br>It should work with no more than `docker run --rm -p 8080:80 c344`
 * [20 points] The image is of the CYBER 344 web site.
 * [10 points] You have added a `mylab.md` file to the source code which results in a `mylab.html` page in the image.
 * [10 points] When browsing to `http://localhost:8080.mylab` it presents a web page with your name and the date you created that page.
