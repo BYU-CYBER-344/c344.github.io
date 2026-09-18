@@ -13,17 +13,17 @@ In this lab you will do two tasks:
 1. Use the [official Jekyll container]() to test and build a website from the Jekyll source files.
 2. Use the [httpd Apache container]() to host the website you just built.
 
-In doing so, you will depend on the container processes you learned in [Homework 2](HW-2).
+In doing so, you will depend on the container commands you learned in [Homework 2](HW-2).
 
 ### Resources and References
 
-Unlike the preceding homework, we are not giving you step-by-step instructions or CLI. We intend for you to look up the references and figure out the tasks. Nevertheless, check the tips on each step to avoid pitfalls.
+Unlike the Homework 2, we are not giving you step-by-step instructions or CLI. We intend for you to look up the references and figure out the tasks. Nevertheless, check the tips on each step to avoid pitfalls.
 
 Here are the resources and references you will need:
 
 * [Homework 2](HW-2)<br/>(Use this as a reference for Docker commands.)
 * [BYU CYBER 344 Website Source Repo](https://github.com/BYU-CYBER-344/c344.github.io)
-* [Jekyll official documentation](https://jekyllrb.com/docs/)
+* [Jekyll Official Documentation](https://jekyllrb.com/docs/)
 * [Jekyll Container Image on Docker Hub](https://hub.docker.com/r/jekyll/jekyll)
 * [Jekyll Docker Readme on GitHub](https://github.com/envygeeks/jekyll-docker/blob/master/README.md)<br/>Be sure to check out the **Usage** section.
 * [httpd Apache HTTP Server Image on Docker Hub](https://hub.docker.com/_/httpd)<br/>(This is the same one we used in **Homework 2**).
@@ -31,7 +31,7 @@ Here are the resources and references you will need:
 
 ## Part 1: Test and Build the CYBER 344 web site from Jekyll sources
 
-The [BYU CYBER 344](https://c344.byucyber.net) website, *including these lab instructions* is written in Jekyll and hosted on GitHub Pages. GitHub will host a pages website for free if the source code is kept public. You will build and host a copy of the class website.
+The [BYU CYBER 344](https://c344.byucyber.net/map) website, *including these lab instructions* is written in Jekyll and hosted on GitHub Pages. GitHub will host a pages website for free if the source code is kept public. You will build and host a copy of the class website.
 
 1. Get a copy of the web site source by cloning the [repo](https://github.com/BYU-CYBER-344/c344.github.io) to a directory to which your container solution has access.
 2. Serve the site locally using the `jekyll serve` command as described in the **Jekyll Docker Readme**.
