@@ -31,16 +31,16 @@ Here are the resources and references you will need:
 
 ## Part 1: Test and Build the CYBER 344 web site from Jekyll sources
 
-The [BYU CYBER 344](https://c344.byucyber.net/map) website, *including these lab instructions* is written in Jekyll and hosted on GitHub Pages. GitHub will host a pages website for free if the source code is kept public. You will build and host a copy of the class website.
+The [BYU CYBER 344](https://c344.byucyber.net/map) website, *including these lab instructions* is written in MarkDown/Jekyll and hosted on GitHub Pages. GitHub will host a pages website for free if the source code is kept public. You will build and host a copy of the class website.
 
 1. Get a copy of the web site source by cloning the [repo](https://github.com/BYU-CYBER-344/c344.github.io) to a directory to which your container solution has access.
-2. Serve the site locally using the `jekyll serve` command as described in the **Jekyll Docker Readme**.
+2. Serve the site locally using `docker run` with the the `jekyll serve` command as described in the **Jekyll Docker Readme**.
     * Also see the tips below.
 3. With the site running locally, start with the **/map** page and browse the website to see that it is all working.
     * The map page should be at [http://localhost:4000/map](http://localhost:4000/map)
 4. Experiment with one or two changes and see that they are reflected in the site.
 5. Add a new file called `mylab.md`. In that file, put your name, the date, and any comments you want to make.
-    * Because this is Jekyll, the MarkDown file must start with [front matter](https://jekyllrb.com/docs/front-matter/) for Jekyll to convert the `mylab.md` file to `mylab.html`. Front matter starts with a `---` line and ends with another `---` line. See the other `.md` files in the source for examples.
+    * Because this is Jekyll, the MarkDown file must start with [front matter](https://jekyllrb.com/docs/front-matter/). That indicate to Jekyll that it should convert `mylab.md` file to `mylab.html`. Front matter starts with a `---` line and ends with another `---` line. See the other `.md` files in the source for examples.
 6. Make sure your new `mylab` page is served.
     * It should appear at [http://localhost:8080/mylab](http://localhost:8080/mylab).
 5. Exit the local server.
