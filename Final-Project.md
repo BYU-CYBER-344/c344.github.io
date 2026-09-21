@@ -52,7 +52,6 @@ Your writeup should tell the story of your project. It must include:
 * Problems or errors you encountered and how you resolved them
 * Setup and usage instructions
 * External tools/resources you used (with proper references)
-* A link to a GitHub repo containing your sources and documentation.
 
 If someone else reads your documentation carefully, they should be able to **recreate your project**.
 

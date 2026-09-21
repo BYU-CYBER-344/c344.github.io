@@ -2,8 +2,6 @@
 Title: Final Project Documentation
 ---
 
-**This is preliminary, subject to change.**
-
 Your final project documentation is due on the last day of class (before reading day and final exams). Your documentation should provide sufficient information that someone could use the product or repeat the experiment. It should also report on your process for creating the project similar to what you offer in the live presentation. Your presentation and documentation combined serve as evidence of a working project.
 
 ## Creation and Submission
@@ -61,5 +59,5 @@ We have no page count, word count, font size, or margin guidelines. Please make 
 |**Creation**<br/>20 points|Goals of the project are clear. There is a description of the steps the team followed. Challenges and obstacles are described along with their solutions.|Describes the purpose of the project but some steps in the development process are missing.|The narrative of the development process is unordered and hard to understand.|It is hard to tell how the team went about the work; word salad.|
 |**Depth of Coverage**<br/>5 points|Thorough and insightful coverage of the topic; demonstrates deep understanding.|Good coverage of the topic; demonstrates solid understanding.|Basic coverage of the topic; demonstrates some understanding.|Superficial coverage of the topic; demonstrates limited understanding.|
 |**Organization**<br/>10 points|There is a clear and consistent organizational structure to the document (specific introduction and conclusion, sequenced material within the body, and transitions). The organization is skillful and makes for a cohesive presentation.|There is a clear and consistent organizational structure to the presentation.|There is some organizational structure but it isn't consistently followed.|Poorly organized; lacks clear structure.|
-|**Materials**<br/>5 points|Uses appropriate and relevant supporting material such as illustrations, tables, statistics, analogies, and/or quotations. Material makes an important contribution to communicating the message.|Supporting material is present and generally supports the documentation.|Supporting material is not connected to the narrative of the document.|Insufficient or missing supporting material.|
+|**Materials**<br/>10 points|Uses appropriate and relevant supporting material such as illustrations, tables, statistics, analogies, and/or quotations. Material makes an important contribution to communicating the message.|Supporting material is present and generally supports the documentation.|Supporting material is not connected to the narrative of the document.|Insufficient or missing supporting material.|
 |**Relevance and Accuracy**<br/>10 points|Highly relevant and accurate information; uses credible sources effectively. There is a clear and compelling central message.|Relevant and accurate information; sources are mostly credible; message is clear.|Mostly relevant and accurate information; some credible sources used. There is an understandable central message but it is not memorable.|Irrelevant or inaccurate information; lacks credible sources. The central message is not explicit.|
