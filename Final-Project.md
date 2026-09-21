@@ -17,8 +17,8 @@ The final project is worth **270 points total** (27% of your grade). It is desig
 
 You will form teams of **4 to 6 students**. Five is recommended. For the *Team Formation* assignment (not graded), you must report who is on your team. If you do not have a team, notify us and you will be assigned to an instructor-assembled team.
 
-- Only **one team member** needs to submit the working project and documentation.
-- The **presentation** will be graded by the professor.
+- Only **one team member** needs to submit the working project and documentation. (Though if more do it's not a problem.)
+- Your **presentation** will be graded by the professor.
 - **Peer evaluations** must be submitted by each student individually.
 
 ## Project Components
@@ -26,6 +26,10 @@ You will form teams of **4 to 6 students**. Five is recommended. For the *Team F
 ### A Working Project (100 Points)
 
 By the end, your project should be **functional and demonstrable**. It should serve a real purpose, align with your design goals, and show meaningful effort from the team.
+
+Beyond being of sufficient size and scope, the two criteria for your project are:
+* It should involve operating systems (this includes containers).
+* It should involve cybersecurity (security and/or privacy).
 
 ### Team Presentation (75 Points)
 
@@ -48,32 +52,35 @@ Your writeup should tell the story of your project. It must include:
 * Problems or errors you encountered and how you resolved them
 * Setup and usage instructions
 * External tools/resources you used (with proper references)
+* A link to a GitHub repo containing your sources and documentation.
 
-If someone else read your documentation, they should be able to **recreate your project**.
+If someone else reads your documentation carefully, they should be able to **recreate your project**.
 
 ### Peer Evaluation (20 Points)
 
 At the conclusion of your project, each student must evaluate their teammates’ contributions. The composite score (from self and team feedback) will determine your grade for this section.
 
-## Project Options
+## Project Concepts
 
-Choose **one** of the following projects (or propose your own). These are intentionally challenging. You will likely need to research online, experiment with existing tools, and problem-solve creatively. While you may seek advice from experts, **all work must be completed by your team**.
+You may choose one of the following projects or propose your own. If you choose one of these, you should still consider how you will customize the project -- there is considerable flexibility in each of them. A new project, not listed here, should be of similar scope and difficulty.
+
+You will likely need to research online, experiment with existing tools, and problem-solve creatively. While you may seek advice from experts, **all work must be completed by your team**.
 
 ### Suggested Projects
 
 #### Create Your Own Linux Distro
 
 Use [Linux From Scratch](https://www.linuxfromscratch.org/) or a similar resource to create a custom Linux distribution.
-- Define a **specific cybersecurity-related use case** (e.g., forensic analysis, penetration testing, hardened server, feature demonstration).
+- Define a **specific cybersecurity-related use case** to guide your custom distro. (E.g., forensic analysis, penetration testing, hardened server, feature demonstration).
 - Justify your design decisions.
-- Produce an ISO that others can install and test.
+- Produce an ISO that others could install and test.
 
 Modifying an existing ISO is insufficient. The operating system must be made from scratch.
 
 #### SOC Dashboard for Data Center Infrastructure
 
 Build a web-based monitoring dashboard that includes:
-- **Real-time data visualization**
+- **Real-time data visualization**. Possible data include:
     - Network traffic (possibly including geo maps of traffic sources)
     - Server status (CPU, RAM, disk, temperature, etc.)
     - Global data from public sources (weather, airline activity, seaport activity, )
@@ -92,7 +99,7 @@ Write your own CLI shell with features such as:
 #### Hardened Server
 
 Choose a base Linux or BSD distribution and prepare a server to operate in a hostile environment.
-- Go well-beyond the Lab 3 hardening task.
+- Go beyond the Lab 3 hardening task.
 - Include firewall, auditing, SELinux/AppArmor, intrusion detection, and logging etc.
 - Provide a **hardening guide** and a before/after security comparison.
 - Test it using penetration testing tools.
@@ -113,7 +120,7 @@ Create a cluster of web servers with load balancing.
 
 ### Other Projects
 
-If you would like to propose a different project, it must be approved by the professor. Your idea should:
+All projects must be approved by the professor. Your idea should:
 - Be directly related to **operating systems**
 - Address security and/or privacy concerns.
 - Be of similar **scope and difficulty** as the projects above
