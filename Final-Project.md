@@ -2,8 +2,6 @@
 title: Final Project
 ---
 
-**This is preliminary, subject to change.**
-
 The final project is worth **270 points total** (27% of your grade). It is designed to evaluate your ability to work as part of a team, apply concepts learned in class, and tackle a challenging operating-systems-related problem.
 
 **Breakdown of points:**
@@ -31,7 +29,9 @@ By the end, your project should be **functional and demonstrable**. It should se
 
 ### Team Presentation (75 Points)
 
-Toward the end of the semester, your team will present your project. This presentation should include:
+Toward the end of the semester, your team will present your project. You are limited to 10 minutes of presentation and 2 minutes of Q&A.
+
+The presentation should include:
 
 * The problem or purpose of your project
 * An overview of your design and decisions
@@ -64,47 +64,56 @@ Choose **one** of the following projects (or propose your own). These are intent
 #### Create Your Own Linux Distro
 
 Use [Linux From Scratch](https://www.linuxfromscratch.org/) or a similar resource to create a custom Linux distribution.
-
-- Define a **specific use case** (e.g., lightweight IoT device, forensic analysis, penetration testing, educational distro).
+- Define a **specific cybersecurity-related use case** (e.g., forensic analysis, penetration testing, hardened server, feature demonstration).
 - Justify your design decisions.
 - Produce an ISO that others can install and test.
 
-Taking an existing ISO will not be permitted. The operating system must be made from scratch.
+Modifying an existing ISO is insufficient. The operating system must be made from scratch.
 
-#### Resource Monitoring Dashboard for Data Center Infrastructure
+#### SOC Dashboard for Data Center Infrastructure
 
 Build a web-based monitoring dashboard that includes:
+- **Real-time data visualization**
+    - Network traffic (possibly including geo maps of traffic sources)
+    - Server status (CPU, RAM, disk, temperature, etc.)
+    - Global data from public sources (weather, airline activity, seaport activity, )
+- **Alerts for critical events including threat indicators**
+- Collect data via standard protocols such as SNMP, IPMI, DRAC/iDRAC, UPNP, or other protocols.
 
-- **Real-time data visualization** (CPU, RAM, disk, network, power, temperature)
-- **Alerts for critical events including threats**
-- Data collected via SNMP, IPMI, DRAC/iDRAC, UPNP, or other protocols
-
-#### Process Scheduling Simulator
-
-Develop a simulator that models various process scheduling algorithms (Round Robin, Priority Scheduling, Shortest Job First, Multilevel Queue, etc.).
-
-- Provide **visualizations** of scheduling behavior.
-- Compare performance across different workloads.
-
-#### Custom Shell or Command Interpreter
+#### Custom CLI Shell
 
 Write your own CLI shell with features such as:
 
-- Parsing and executing commands
-- Pipelining and redirection
-- Basic scripting support
+- Parsing and executing commands (fork and exec)
+- Pipelining and redirection of STDIN and STDOUT
+- Innovative security features not seen in existing shells such as managing privilege escalation.
+- May or may not be based on an open-source shell such as BASH.
 
-#### OS Security Hardening Project
+#### Hardened Server
 
-Choose a base Linux or BSD distribution and implement **system hardening** measures.
-
-- Configure firewall, auditing, SELinux/AppArmor, intrusion detection, and logging etc.
+Choose a base Linux or BSD distribution and prepare a server to operate in a hostile environment.
+- Go well-beyond the Lab 3 hardening task.
+- Include firewall, auditing, SELinux/AppArmor, intrusion detection, and logging etc.
 - Provide a **hardening guide** and a before/after security comparison.
+- Test it using penetration testing tools.
+
+#### Kubernetes Cluster
+
+Create a Kubernetes cluster and deploy a set of containers on the cluster.
+- Define a specific (simulated) purpose for the cluster. (E.g. Hosting a CTF competition.)
+- Include a control plane and at least two nodes.
+- Demonstrate high-availability features such as failover or auto-restart.
+
+#### Load-Balanced Web Servers
+
+Create a cluster of web servers with load balancing.
+- Choose and deploy a load balancing solution.
+- Determine how to handle session state when a browser may migrate to a different server.
+- Demonstrate robustness with a simulated server failure.
 
 ### Other Projects
 
 If you would like to propose a different project, it must be approved by the professor. Your idea should:
-
 - Be directly related to **operating systems**
 - Address security and/or privacy concerns.
 - Be of similar **scope and difficulty** as the projects above

@@ -6,7 +6,7 @@ title: Final Project Presentations
 
 Final project presentations will be the week before and the week after Thanksgiving week. Each presentation day we will use the whole class period plus the lab period with a 10 minute break between the two. Your presentation and documentation combined serve as evidence of a working project. 
 
-You have 10 minutes to present with two minutes between presentations to switch between groups. In order to give enough time for every group, we will cut you off at the 10 minute mark. If you want to take questions (which we recommend), you should plan to present for seven or eight minutes and take questions for the balance of your time.
+You have 10 minutes to present with two minutes for questions and answers and two minutes to switch between groups. In order to give enough time for every group, we will cut you off at the 10 minute mark.
 
 ## Suggested Outline
 
