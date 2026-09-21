@@ -127,4 +127,4 @@ Submit this lab by uploading your container image `.tar` file to LearningSuite u
 * [10 points] The image loads and serves a web site.<br>It should work with no more than `docker run --rm -p 8080:80 c344`
 * [20 points] The image is of the CYBER 344 web site.
 * [10 points] You have added a `mylab.md` file to the source code which results in a `mylab.html` page in the image.
-* [10 points] When browsing to `http://localhost:8080.mylab` it presents a web page with your name and the date you created that page.
+* [10 points] When browsing to `http://localhost:8080/mylab` it presents a web page with your name and the date you created that page.
