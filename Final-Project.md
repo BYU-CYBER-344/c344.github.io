@@ -99,8 +99,8 @@ Write your own CLI shell with features such as:
 
 Choose a base Linux or BSD distribution and prepare a server to operate in a hostile environment.
 - Go beyond the Lab 3 hardening task.
-- Include firewall, auditing, SELinux/AppArmor, intrusion detection, and logging etc.
-- Provide a **hardening guide** and a before/after security comparison.
+- Include things like firewall, auditing, SELinux/AppArmor, intrusion detection, and logging etc.
+- Expose it to the internet and log intrusion attempts.
 - Test it using penetration testing tools.
 
 #### Kubernetes Cluster
