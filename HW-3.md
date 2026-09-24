@@ -1,9 +1,6 @@
 ---
 title: "HW 3: Host Firewalls"
 ---
-
-# HW 3: Host Firewalls
-
 Your computer has a host firewall—or, at least, it should. A *host firewall* is software that runs on an individual computer and controls network traffic to and from that computer. This contrasts with a network firewall, which usually runs on dedicated hardware at the boundary between a local-area network and the internet.
 
 On **Windows**, the host firewall is **Windows Defender Firewall**. It is part of the **Windows Security** toolset, which also includes **Microsoft Defender Antivirus** and **Microsoft Defender SmartScreen**.
