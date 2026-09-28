@@ -141,3 +141,17 @@ Please follow this outline:
     * How did you unblock port 80?<br/>(Delete rule, disable rule, other?)
 
 Upload your **PDF** writeup to LearningSuite.
+
+## Extra Credit
+
+* [8 Points] I have not validated the macOS instructions. Make improvements as follows:
+    * Fork the course website repo [located here](https://github.com/BYU-CYBER-344/c344.github.io).
+    * Make corrections and improvements to your fork.
+    * Submit a pull request with your fixes.
+* [8 Points] Add details to the Linux instructions equivalent to those given for Windows.
+    * Fork the course website repo [located here](https://github.com/BYU-CYBER-344/c344.github.io).
+    * Make corrections and improvements to your fork.
+    * Submit a pull request with your fixes.
+* [10 Points] Block one or more websites from reporting to Google Analytics
+    * Research how Google Analytics functions.
+    * Create one or more host firewalls rules to block that reporting.
