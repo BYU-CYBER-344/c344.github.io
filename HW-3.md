@@ -144,6 +144,8 @@ Upload your **PDF** writeup to LearningSuite.
 
 ## Extra Credit
 
+*Extra credit can be done any time before the last regular day of class. It need not be completed before the due date of this lab.*
+
 * [8 Points] I have not validated the macOS instructions. Make improvements as follows:
     * Fork the course website repo [located here](https://github.com/BYU-CYBER-344/c344.github.io).
     * Make corrections and improvements to your fork.
