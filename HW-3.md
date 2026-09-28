@@ -11,6 +11,8 @@ On **Linux**, the host-firewall framework is **Netfilter**, which is built into 
 
 In this homework assignment, you will review the existing settings on your host firewall, experiment with changing a few settings, and write up your findings. What you learn here will inform your **Lab 3** assignment, in which you will use a host firewall and related tools to harden a web server running on Ubuntu.
 
+Choose one of the three options below: **Windows**, **macOS**, or **Linux**; whichever is most convenient or is your "daily driver."
+
 ## Windows
 
 To perform these tasks, you need administrator access to Windows. Therefore, if you are completing this homework on a lab computer where you do not have administrator access, you will need to use a Windows virtual machine on which you do have administrator rights.
