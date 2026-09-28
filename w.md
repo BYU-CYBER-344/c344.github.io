@@ -1,6 +1,6 @@
 ---
 title: Welcome
 layout: redirect
-redirect: https://c344.byucyber.net/welcome/L04
+redirect: https://c344.byucyber.net/welcome/L05
 ---
 Redirect
