@@ -75,6 +75,8 @@ sudo apt update
 sudo apt install ufw fail2ban
 ```
 
+### 1. Configure UFW
+
 [UFW](https://wiki.ubuntu.com/UFW) is a configuration tool for the `iptables` firewall built into the Linux kernel. Before enabling UFW, you must first open any important ports. Otherwise you could lock yourself out of your own server. This is less of a risk when using a VM on a local host because you have direct access to the console. When running a cloud server such as an Amazon [EC2](https://aws.amazon.com/pm/ec2/) instance, people have accidentally blocked [SSH](https://ubuntu.com/server/docs/how-to/security/openssh-server/) to find themselves unable to access their servers.
 
 Configure UFW to allow Apache to serve web sites.
@@ -97,3 +99,114 @@ sudo ufw enable
 sudo ufw status verbose
 ```
 
+Test your web server to make sure it still works.
+
+### 2. Prep and Review Fail2Ban Configuration
+
+In Fail2Ban, `.local` files take precedence over `.conf` files. Because of this, we will make copies of the `.conf` files and edit the new `.local` files, leaving the `.conf` files untouched.
+
+```sh
+sudo cp /etc/fail2ban/fail2ban.conf /etc/fail2ban/fail2ban.local
+sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+```
+
+Jails can be found at `/etc/fail2ban/jail.local`. Read over the comments at the top of this file. They are very helpful for understanding how this file works. More information about the default jails and how they work can be found [here](https://docs.plesk.com/en-US/obsidian/administrator-guide/server-administration/protection-against-brute-force-attacks-fail2ban/fail2ban-jails-management.73382/).
+
+### 3. Observe the Apache Access Logs to Inform Your Configuration
+
+Apache is configured to store logs at `/var/log/apache2/`. You can view a live output of your Apache connections using:
+
+```sh
+sudo tail -f /var/log/apache2/access.log
+```
+
+With that command running, visit your website. Do a few good good and bad login attempts.
+
+> Remember, a correct password is the same as the username with "-9455" appended. A bad password is anything else.
+
+Your requests should show up in the terminal from the `tail` command. You can use these access logs to search for patterns to block. You should notice `200` status codes for successful logins and `401` status codes for bad logins. Use <kbd>Ctrl-c</kbd> to end the live log view.
+
+### 4. Create a Jail Filter
+
+Fail2Ban uses ls"jails" to detect malicious connections and deal with them. Pre-configured jails can be found in `/etc/fail2ban/filter.d/` and are referenced in `/etc/fail2ban/jail.local`. Within the latter file, reference starts with the name in square brackets. By default, they are disabled. Jails can be enabled by adding the line `enabled = true` at the end of the jail reference.
+
+Since you will be creating your own jail, create a file in `/etc/fail2ban/filter.d/` called `http-401.conf` with the following contents:
+
+```conf
+[Definition]
+failregex = ^<HOST> \S+ \S+ \[[^\]]*\] "[^"]*" 401 
+ignoreregex =
+```
+
+The `failregex` uses a regular expression to flag the connections that you tell it to. In this case, it will be looking at our Apache access logs. You can compare this regex to the lines you viewd in `/var/log/apache2/access.log`
+
+* `^` Indicates to start at the beginning of a line in the log file.
+* `<HOST>` Fail2Ban uses this custom pattern to capture the IP address of the client. That way it knows what source to ban.
+* `\S+` This is the `identd` value which is rarely used any more and has a simple `-` when empty. `\S+` matches any sequence of non-space characters.
+* `\S+` Authenticated user. In our case, always `-` since the user does not authenticate to the Apache server.
+* `\[[^\]]*\]` In the log, date/time is enclosed in square brackets. This pattern simply matches anything in square brackets.
+* `"[^"]*"` The first line of the HTTP request which includes the verb (e.g. `GET`, `POST`), the path and query from the URL, and the HTTP protocol version. This pattern simply matches anything in double quotes.
+* `401` The status code. This pattern only matches responses with a 401 status.
+
+In your `.conf` file, `ignoreregex` is left blank which means to apply the filter to anything that matches `failregex`.
+
+### 5. Create Your New Jail
+
+Edit `/etc/fail2ban/jail.local` and scroll down to the **JAILS** section and before the **SSH servers** section (both denoted in comments). That section usually starts empty. Create a jail named `[http-401]`. Following the examples of other jails, enter it as follows:
+
+```conf
+[http-401]
+# Turns on the jail
+enabled = true
+# Only listen to port 80 (the HTTP port)
+port = http,https
+# Name of our test jail configuration file
+filter = http-401
+# Path to the log we will watch
+logpath = /var/log/apache2/access.log
+# Ban after 2 offenses
+maxretry = 2
+# The user will be banned for 60 seconds
+bantime = 60
+# Max retry counter will be reset to 0 after 180 seconds
+findtime = 180
+```
+
+### 6. Restart Fail2Ban to Apply the Configuration
+
+```bash
+sudo service fail2ban restart
+```
+Check its status:
+```bash
+sudo service fail2ban status
+```
+If it is not active (running), then you probably have a syntax error in your config files
+
+Verify that your new jail is running
+
+```bash
+sudo fail2ban-client status
+```
+If you see `http-401`, then it is actively looking for a user to ban!
+
+### 7. Test the jail
+
+Open your website on a computer other than the Ubuntu server where it is running. Log in correctly to see that works. Then use bad passwords at least twice in 60 seconds. Your computer should get locked out.
+
+You can check how many people are banned by a specific jail with:
+
+```bash
+sudo fail2ban-client status http-401 # or any jail name
+```
+
+> If you want to unban an IP, use `sudo fail2ban-client set <JailName> unbanip <IP address>`
+
+### 8. Create Two More Jails
+
+Using the patterns from above, create two more jails. Consider what suspicious activity you might want to trigger a ban. Here are some ideas:
+
+* Frequent 404 errors indicating an attempt to find hidden pages.
+* Retrieval of `robots.txt` indicating that the request is coming from a indexing service (e.g. Google) or a web crawler of some sort.
+* Limit the 401 filter you created to just the `/cgi-bin/login.cgi` page.
+* Prohibit certain browsers.
