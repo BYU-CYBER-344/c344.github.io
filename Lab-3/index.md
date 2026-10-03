@@ -2,19 +2,17 @@
 title: "Lab 3: System Hardening"
 ---
 
-*Under construction!*
-
 In this lab you will install the Apache web server on the Ubuntu virtual machine you created in [Homework-1](/HW-1). You will load and configure a sample web site that we configured for you. Then you will harden the Ubuntu operating system against attacks using a combination of [Uncomplicated Firewall (UFW)](https://wiki.ubuntu.com/UFW) and [Fail2Ban](https://en.wikipedia.org/wiki/Fail2ban).
 
 ## A. Prepare your OS and VM
 
-You should be able to use the Ubuntu VM instance you created in [Homework-1](/HW-1). Check that it boots, is stable and doesn't have any unusual configuration or applications installed. If you have any concerns, create a new instance and re-install Ubuntu from the installation .iso at [https://ubuntu.com/desktop](https://ubuntu.com/desktop).
+You should be able to use the Ubuntu VM instance you created in [Homework-1](/HW-1). Check that it boots, is stable and does not have any unusual configuration or applications installed. If you have any concerns, create a new instance and re-install Ubuntu from the installation .iso at [https://ubuntu.com/desktop](https://ubuntu.com/desktop).
 
-We recommend that you a checkpoint (Hyper-V) or snapshot (VMWare, ProxMox) so that you can return your VM to the baseline state if you have any problems. Much like making Git commits, you may make multiple snapshots as you progress to save time in case of problems.
+We recommend that you create a *checkpoint* (Hyper-V) or *snapshot* (VMWare, ProxMox) so that you can return your VM to the baseline state if you have any problems. Much like making Git commits, you may make multiple snapshots as you progress to save time in case of problems.
 
 ## B. Install Apache and Verify Access
 
-Open a terminal and use the following commands to install Apache on your server. Be sure you know what each command does. If necessary, look up the commands or ask an AI what each does. Remember that `#` in bash indicates a comment. So in the commands below, `# optional, recommended` is telling you that upgrading the Ubuntu components is an optional step but we recommend upgrading the Ubuntu components to the latest.
+Open a terminal and use the following commands to install the Apache web server. Be sure you know what each command does. If necessary, look up the commands or ask an AI what each does. Remember that `#` in bash indicates a comment. So in the commands below, `# optional, recommended` is telling you that upgrading the Ubuntu components is an optional step but we recommend upgrading the Ubuntu components to the latest.
 
 ```sh
 sudo apt update
@@ -31,11 +29,11 @@ Next, you need to verify that you can access your Ubuntu-hosted Apache web serve
 hostname -I
 ```
 
-> You can also get the address using `ip addr` or `ifconfig` but `hostname -i` is usually simpler.
+> You can also get the address using `ip addr` or `ifconfig`, but `hostname -i` is usually simpler.
 
 On the computer hosting the VM, or on another computer on your LAN, browse to that IP address and verify that you see the **Apache2 Default Page**.
 
-> Most of the time this just works. However, if you cannot access the web server from another computer, it may be due to the way your hypervisor bridges virtual machines to the network. Use the documentation regarding network settings for your hypervisor and/or AI chat support as needed to update your network settings and ensure that at least one other computer can access your web server. You will use a browser on that other computer to test your hardening.
+> Most of the time this just works. However, if you cannot access the web server from another computer, it may be due to the way your hypervisor bridges virtual machines to the network. Use the documentation regarding *network settings* for your hypervisor and/or AI chat support as needed to update your network settings and ensure that at least one other computer can access your web server. You will use a browser on that other computer to test your hardening.
 
 ## C. Load and Configure the Web Site
 
@@ -61,13 +59,13 @@ Test your website by browsing to the IP address of your Ubuntu server from anoth
 * The home page simply says "Sample Site" with a login link.
 * To log in, use any username. The password is the same as the username plus "-9455". For example, if the username is "Thag" then the password is "Thag-9455".
 
-If anything doesn't work, troubleshoot the problems before moving on to the next step.
+If something doesn't work, troubleshoot the problem before moving on to the next step.
 
-> Understanding what each of the above commands does will help in troubleshooting. AI can also provide valuable help, especially of you provide the exact error messages. However, it is not reliable so don't let AI take you too far down a rabbit hole before trying something else. You can also return to a vm snapshot and start over. These commands can be repeated pretty quickly.
+> Understanding what each of the above commands does will help in troubleshooting. AI can also provide valuable help, especially of you provide the exact error messages. However, it is not reliable so don't let AI take you too far down a rabbit hole before trying something else. You can also return to a VM snapshot and start over. The installation commands can be repeated pretty quickly.
 
 ## D. Harden your server
 
-To help protect your server from attacks, we will use two tools: Uncomplicated Firewall (UFW) and Fail2Ban. Each of these is intended to be used as a layer of protection following a [defense in depth](https://en.wikipedia.org/wiki/Defense_in_depth_(computing)) strategy. In the case of UFW, you will block network ports that are not needed in this application. Any software listening on those ports should have its own layer of security so this is an additional layer that can prevent exploitation of undiscovered vulnerabilities. In the case of Fail2Ban, you will protect your server from repeated attempts to guess a password thereby increasing the utility of weak passwords.
+To help protect your server from attacks, we will use two tools: Uncomplicated Firewall (UFW) and Fail2Ban. Each of these is intended to be used as a layer of protection following a [defense in depth](https://en.wikipedia.org/wiki/Defense_in_depth_(computing)) strategy. In the case of UFW, you will block network ports that are not needed in this web application. Any software listening on those ports should have its own layer of security so this is an additional layer that can prevent exploitation of undiscovered vulnerabilities. In the case of Fail2Ban, you will protect your server from repeated attempts to guess a password thereby increasing the utility of weak passwords.
 
 Install UFW and Fail2Ban with the following commands:
 ```sh
@@ -77,7 +75,7 @@ sudo apt install ufw fail2ban
 
 ### 1. Configure UFW
 
-[UFW](https://wiki.ubuntu.com/UFW) is a configuration tool for the `iptables` firewall built into the Linux kernel. Before enabling UFW, you must first open any important ports. Otherwise you could lock yourself out of your own server. This is less of a risk when using a VM on a local host because you have direct access to the console. When running a cloud server such as an Amazon [EC2](https://aws.amazon.com/pm/ec2/) instance, people have accidentally blocked [SSH](https://ubuntu.com/server/docs/how-to/security/openssh-server/) to find themselves unable to access their servers.
+[UFW](https://wiki.ubuntu.com/UFW) is a configuration tool for the `iptables` firewall built into the Linux kernel. Before enabling UFW, you must first open any important ports. Otherwise you could lock yourself out of your own server. This is less of a risk when using a VM on a local host because you have direct access to the console. When running a cloud server such as an Amazon [EC2](https://aws.amazon.com/pm/ec2/) instance, people have accidentally blocked [SSH](https://ubuntu.com/server/docs/how-to/security/openssh-server/) and find themselves unable to access their servers.
 
 Configure UFW to allow Apache to serve web sites.
 ```sh
@@ -128,25 +126,26 @@ Your requests should show up in the terminal from the `tail` command. You can us
 
 ### 4. Create a Jail Filter
 
-Fail2Ban uses ls"jails" to detect malicious connections and deal with them. Pre-configured jails can be found in `/etc/fail2ban/filter.d/` and are referenced in `/etc/fail2ban/jail.local`. Within the latter file, reference starts with the name in square brackets. By default, they are disabled. Jails can be enabled by adding the line `enabled = true` at the end of the jail reference.
+Fail2Ban uses "jails" to detect malicious connections and deal with them. Pre-configured jail filters can be found in `/etc/fail2ban/filter.d/`. Jails are configured in `/etc/fail2ban/jail.local`. Within the latter file, a jail starts with a name in square brackets. By default, jails are disabled. Jails can be enabled by adding the line `enabled = true` to the jail reference.
 
-Since you will be creating your own jail, create a file in `/etc/fail2ban/filter.d/` called `http-401.conf` with the following contents:
+Since you will be creating your own jail, create a filter file in `/etc/fail2ban/filter.d/` called `http-401.conf` with the following contents:
 
+**/etc/fail2ban/filter.d/http-401.conf**
 ```conf
 [Definition]
 failregex = ^<HOST> \S+ \S+ \[[^\]]*\] "[^"]*" 401 
 ignoreregex =
 ```
 
-The `failregex` uses a regular expression to flag the connections that you tell it to. In this case, it will be looking at our Apache access logs. You can compare this regex to the lines you viewd in `/var/log/apache2/access.log`
+The `failregex` line uses a regular expression to flag server requests. In this case, it will be looking at our Apache access logs. You can compare this regex to the lines you viewd in `/var/log/apache2/access.log`
 
 * `^` Indicates to start at the beginning of a line in the log file.
 * `<HOST>` Fail2Ban uses this custom pattern to capture the IP address of the client. That way it knows what source to ban.
 * `\S+` This is the `identd` value which is rarely used any more and has a simple `-` when empty. `\S+` matches any sequence of non-space characters.
-* `\S+` Authenticated user. In our case, always `-` since the user does not authenticate to the Apache server.
-* `\[[^\]]*\]` In the log, date/time is enclosed in square brackets. This pattern simply matches anything in square brackets.
+* `\S+` Authenticated user. In our case, always `-` since the user does not authenticate to the Apache server but only to a web page.
+* `\[[^\]]*\]` In the log, date/time is enclosed in square brackets. This pattern matches anything in square brackets.
 * `"[^"]*"` The first line of the HTTP request which includes the verb (e.g. `GET`, `POST`), the path and query from the URL, and the HTTP protocol version. This pattern simply matches anything in double quotes.
-* `401` The status code. This pattern only matches responses with a 401 status.
+* `401` The status code. This pattern only matches responses with a 401 status code.
 
 In your `.conf` file, `ignoreregex` is left blank which means to apply the filter to anything that matches `failregex`.
 
@@ -158,11 +157,11 @@ Edit `/etc/fail2ban/jail.local` and scroll down to the **JAILS** section and bef
 [http-401]
 # Turns on the jail
 enabled = true
-# Only listen to port 80 (the HTTP port)
+# Only listen to ports 80 and 443
 port = http,https
-# Name of our test jail configuration file
+# Name of our jail filter file
 filter = http-401
-# Path to the log we will watch
+# Path to the log to be watched
 logpath = /var/log/apache2/access.log
 # Ban after 2 offenses
 maxretry = 2
@@ -174,18 +173,20 @@ findtime = 180
 
 ### 6. Restart Fail2Ban to Apply the Configuration
 
-```bash
+```sh
 sudo service fail2ban restart
 ```
+
 Check its status:
-```bash
+```sh
 sudo service fail2ban status
 ```
+
 If it is not active (running), then you probably have a syntax error in your config files
 
 Verify that your new jail is running
 
-```bash
+```sh
 sudo fail2ban-client status
 ```
 If you see `http-401`, then it is actively looking for a user to ban!
@@ -233,8 +234,3 @@ Please follow this outline to show evidence of your work:
     * Paste in the regular expressions you used to detect those patterns.
 
 Upload your **PDF** writeup to LearningSuite.
-
-## Extra Credit
-
-*Extra credit can be done any time before the last regular day of class. It need not be completed before the due date of this lab.*
-
