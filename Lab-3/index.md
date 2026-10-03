@@ -210,3 +210,31 @@ Using the patterns from above, create two more jails. Consider what suspicious a
 * Retrieval of `robots.txt` indicating that the request is coming from a indexing service (e.g. Google) or a web crawler of some sort.
 * Limit the 401 filter you created to just the `/cgi-bin/login.cgi` page.
 * Prohibit certain browsers.
+
+## Writeup and Submission
+
+To complete this lab, write up what you did and what you observed and submit it **in PDF format** to LearningSuite.
+You may use the word processing or writing software of your choice so long as it can produce a **PDF** (Markdown, Google Docs, LibreOffice, LaTeX, Microsoft Word, etc.).
+
+Please follow this outline to show evidence of your work:
+* [2 Points] Name, Date, and Lab Title
+* [15 Points] Functioning Web Server
+    * Could you access your web server from another system (the VM host or another computer on the LAN)? (yes/no)
+    * Did login and logout work? (yes/no)
+* [8 Points] UFW Installation and Configuration
+    * Use `sudo ufw status verbose` to verify its function.
+    * Is it working properly? (yes/no)
+* [15 Points] Fail2Ban Installation and Configuration
+    * Open `Developer Tools > Network` in your browser.
+    * Do two bad logins in a row and then try to access any page in the site.
+    * Capture a screenshot of the **Network** tab of in your browser showing the failed logins (with 401 errors) and then the blocked access that follows. Insert that screenshot into this part of your writeup.
+* [20 Points] Two more Fail2Ban Jails
+    * What did you block?
+    * Paste in the regular expressions you used to detect those patterns.
+
+Upload your **PDF** writeup to LearningSuite.
+
+## Extra Credit
+
+*Extra credit can be done any time before the last regular day of class. It need not be completed before the due date of this lab.*
+
