@@ -61,7 +61,7 @@ Test your website by browsing to the IP address of your Ubuntu server from anoth
 
 If something doesn't work, troubleshoot the problem before moving on to the next step.
 
-> Understanding what each of the above commands does will help in troubleshooting. AI can also provide valuable help, especially of you provide the exact error messages. However, it is not reliable so don't let AI take you too far down a rabbit hole before trying something else. You can also return to a VM snapshot and start over. The installation commands can be repeated pretty quickly.
+> Understanding what each of the above commands does will help in troubleshooting. AI can also provide valuable help, especially if you provide the exact error messages. However, it is not reliable so don't let AI take you too far down a rabbit hole before trying something else. You can also return to a VM snapshot and start over. The installation commands can be repeated pretty quickly.
 
 ## D. Harden your server
 
@@ -82,7 +82,7 @@ Configure UFW to allow Apache to serve web sites.
 sudo ufw allow Apache
 ```
 
-> This command simply enables the `Apache` profile in UFW. Is is not actually connected to the **Apache Web Server** application. And all that profile does is enable inbound connections on TCP port 80. You can observe the parameters of the profile using this command: `sudo ufw app info Apache`. Likewise, of you need to handle secure communications you might use this command `sudo ufw allow 'Apache Full'`. If you examine that profile you will find that it opens TCP ports 80 and 443.
+> This command simply enables the `Apache` profile in UFW. Is is not actually connected to the **Apache Web Server** application. And all that profile does is enable inbound connections on TCP port 80. You can observe the parameters of the profile using this command: `sudo ufw app info Apache`. Likewise, if you need to handle secure communications you might use this command `sudo ufw allow 'Apache Full'`. If you examine that profile you will find that it opens TCP ports 80 and 443.
 
 If you are using SSH to access your server then be sure to open the SSH ports:
 ```sh
@@ -224,7 +224,7 @@ Please follow this outline to show evidence of your work:
     * Did login and logout work? (yes/no)
 * [8 Points] UFW Installation and Configuration
     * Use `sudo ufw status verbose` to verify its function.
-    * Is it working properly? (yes/no)
+    * Is it functioning? (yes/no)
 * [15 Points] Fail2Ban Installation and Configuration
     * Open `Developer Tools > Network` in your browser.
     * Do two bad logins in a row and then try to access any page in the site.
