@@ -2,9 +2,9 @@
 title: "HW 4: Programming in C"
 ---
 
-The remaining homework and labs in this course involve systems programming which we will do in [the C Programming Language](https://www.c-language.org/). We use C because it is the language in which the operating system itself was written.Thus, it has native access to all system features. Using C can also give insights into how the operating system functions.
+The remaining homework and labs in this course involve systems programming which we will do in [the C Programming Language](https://www.c-language.org/). We use C because it is the language in which the operating system itself was written. Thus, it has native access to all system features. Using C can also give insights into how the operating system functions.
 
-In this homework, you will install the C developer tools that you need and ensure they work through a simple program that makes system-level calls. In doing so, we will remind you of how pointers work because they are an essential feature of C programming.
+In this homework, you will install the C developer tools that you need and ensure they work through a simple program that makes system-level calls.
 
 ## A: Setup and Test
 
@@ -18,7 +18,7 @@ sudo apt update
 sudo apt install build-essential
 ```
 
-The application we will develop in this homework is called `type`. It simply prints a file to the terminal, similar to how people use `cat`. To start with, we will create a variant on the traditional "Hello World!" application.
+The application we will develop in this homework is called `printfile`. It simply prints a file to the terminal, similar to how people use `cat`. To start with, we will create a variant on the traditional "Hello world!" application.
 
 Create a working directory for this lab.
 
@@ -51,7 +51,7 @@ If you do not specify an output filename when compiling then the executable file
 ./a.out
 ```
 
-## B: A Printfile Program
+## B: A printfile Program
 
 The main exercise in this homework is to write a C program that reads a file specified on the command line and copies it to the terminal. We will call it `printfile`.
 
@@ -67,20 +67,20 @@ int main(int argc, char* argv[]) {
 
 ### A Quick C Refresher
 
-* The `#include` statements bring in header files that declare functions and constants. The two includes in this sample bring in the system calls that will be needed in your application.
-* The `main` function is the entry point into a program. `argc` is the number of arguments on the command line and `argv` is a pointer to an array of pointers to strings that contain the arguments. The first argument is the name of the program being run. So, if `argc == 1` then no name was given; *it should be 2*. The name of the program will be in `argv[0]` and the name of the file to be printed will be in `argv[1]`.
+* The `#include` statements bring in header files that declare functions and constants. The two includes in this sample include the system calls that will be needed in your application.
+* The `main` function is the entry point into a program. `argc` is the number of arguments on the command line and `argv` is an array of pointers to strings that contain the arguments. The first argument is the name of the program being run. So, if `argc == 1` then no name was given; *it should be 2*. The name of the program will be in `argv[0]` and the name of the file to be printed will be in `argv[1]`.
 * An application should return `0` if it is successful and `-1` if there is an error.
-* You can declare a string constant like this: `const char message[] = "Hello";`<br/>The string will contain all of the characters plus a terminating null. So `sizeof(message)` would be `6`. That's why the sample above wrote out `sizeof(message)-1` bytes. Meanwhile `strlen(message)` would be 5.
+* You can declare a string constant like this: `const char message[] = "Hello";`<br/>The string will contain all of the characters plus a terminating null. So, in this example, `sizeof(message)` would be `6`. That's why the sample above wrote out `sizeof(message)-1` bytes. Meanwhile `strlen(message)` would be 5.
 
 ### Some Building Blocks
 
-Open files, pipes, and network sockets are referenced by file descriptors with are integers. Three pre-opened and pre-defined descriptors are STDIN_FILENO, STDOUT_FILENO, and STDERR_FILENO. Which are simply constants for the numbers 0, 1, and 2.
+Open files, pipes, and network sockets are referenced by file descriptors which are integers. Three pre-opened and pre-defined descriptors are STDIN_FILENO, STDOUT_FILENO, and STDERR_FILENO. These are simply constants for the numbers 0, 1, and 2.
 
 To open the file named on the command line in read-only mode:
 ```c
 int fd = open(argv[1], O_RDONLY);
 ```
-The return value is the file descriptor. If it returns -1 then it is an error (e.g. file not found).
+The return value is the file descriptor. If `open()` returns -1 then the function failed. For example, the file was not found.
 
 To declare a buffer with size of 256 bytes (you can choose a size to use):
 ```c
@@ -107,7 +107,7 @@ write(STDERR_FILENO, message, sizeof(message)-1);
 ### Completing the Application
 
 The program should do the following:
-1. Check the program arguments. Report an error with the proper syntax if no filename was given.
+1. Check the program arguments. Report an error no filename was given.
 2. Open the file. Report an error if the file was not found.
 3. Declare a buffer.
 4. Enter a loop, reading from the open file and writing to STDOUT_FILENO.
@@ -126,11 +126,12 @@ Scoring is as follows:
 
 * [2 Points] Name, Date, and Homework Title in a comment
 * [15 Points] Your program compiles and works.
-* [10 Points] Your program uses the direct system calls (`open()`, `close()`, `read()`, `write()`).
+* [5 Points] Your program uses the direct system calls (`open()`, `close()`, `read()`, `write()`).
+* [5 Points] Your program reports appropriate errors if no filename was given or if the file is not found.
 * [3 points] Code is clean and well-formatted.
 
 ## Extra Credit
 
-[10 Points] Before printing (copying) the file, clear the screen and move the cursor to the bottom of the screen.
+[10 Points] Before printing (copying) the file, clear the screen and move the cursor to the top of the screen.
 
 **Hint:** Linux terminals (and Windows since roughly 2021) support ECMA-48 escape codes for clearing the screen, moving the cursor, changing colors, and more. These codes are also known as ANSI escape codes, VT100 escape codes, and Control Sequence Introducer (CSI) sequences.
