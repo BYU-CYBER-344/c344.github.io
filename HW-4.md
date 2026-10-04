@@ -39,7 +39,7 @@ int main(void) {
 }
 ```
 
-This is a bit different from other C "Hello, world!" examples because it uses the system-level `write()` function rather than the more commonly-used `printf()`.
+This is a bit different from other C "Hello, world!" examples because it uses the system-level `write()` function rather than `printf()` from the standard C library.
 
 Compile and link the program with the following command line:
 ```sh
