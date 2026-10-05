@@ -1,5 +1,5 @@
 ---
-title: "Lab 3: System Hardening"
+title: "Lab 3: Server Hardening"
 ---
 
 In this lab you will install the Apache web server on the Ubuntu virtual machine you created in [Homework-1](/HW-1). You will load and configure a sample web site that we configured for you. Then you will harden the Ubuntu operating system against attacks using a combination of [Uncomplicated Firewall (UFW)](https://wiki.ubuntu.com/UFW) and [Fail2Ban](https://en.wikipedia.org/wiki/Fail2ban).
