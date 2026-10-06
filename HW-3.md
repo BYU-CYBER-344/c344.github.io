@@ -44,57 +44,99 @@ Proceed to the **Writeup and Submission** section below to complete this homewor
 
 ## macOS
 
-*These instructions have not been fully validated. If you are a macOS user, you may consider following the Windows instructions on your Windows virtual machine. If you encounter problems with these instructions, consult [this article](https://inventivehq.com/knowledge-base/macos/how-to-configure-macos-firewall-pf) and/or an AI assistant. You may also consider adding detail based on the extra-credit options below.*
+*These instructions were validated on macOS 26 (Tahoe). If you encounter problems, consult [this article](https://inventivehq.com/knowledge-base/macos/how-to-configure-macos-firewall-pf) and/or an AI assistant.*
 
-**macOS** has two services that jointly perform the role of a host firewall. The **Application Firewall** controls network access by application, while **Packet Filter** handles network-level rules.
+**macOS** has two services that jointly perform the role of a host firewall. The **Application Firewall** controls *incoming* connections by application, while **Packet Filter** (**PF**) handles network-level rules in both directions. The Application Firewall cannot block outbound traffic or specific ports, so you will use PF for that.
 
-Open the **macOS Application Firewall** at `Apple menu > System Settings > Network > Firewall`
+Open the **macOS Application Firewall** at `Apple menu > System Settings > Network > Firewall` and select **Options…**
 
 Take note of the following:
 
 * How to turn the firewall on or off
 * How to block all incoming connections
-* What you can control regarding application permissions
+* What you can control regarding application permissions (which applications are listed, and whether signed software is allowed automatically)
 * What stealth mode does
+
+You can view the same settings from Terminal:
+
+```sh
+/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate --getblockall --getallowsigned --getstealthmode
+/usr/libexec/ApplicationFirewall/socketfilterfw --listapps
+```
+
+Next, record the state of PF before you change anything. PF is usually **disabled** by default, and the stock `/etc/pf.conf` contains only Apple's anchor points, so packets that match no rule are passed.
+
+```sh
+sudo pfctl -s info     # look for "Status: Enabled" or "Status: Disabled"
+sudo pfctl -s rules
+cat /etc/pf.conf
+```
+
+> Every `pfctl` command prints `No ALTQ support in kernel` / `ALTQ related functions disabled`, and `-f` prints a warning that it "could result in flushing of rules." These messages are normal on macOS and can be ignored.
 
 For the following steps, you will configure **Packet Filter** using configuration files and the command line.
 
-1. Create a custom anchor file named `/etc/pf.anchors/block-http`.
-2. In that file, add the following rule:
+1. Make a backup of `/etc/pf.conf` so you can restore it at the end:
+```sh
+sudo cp /etc/pf.conf /etc/pf.conf.backup
+```
+2. Create a custom anchor file named `/etc/pf.anchors/block-http` containing the following rule. Files under `/etc` are owned by root, so use `sudo` (for example `sudo nano /etc/pf.anchors/block-http`, or the one-line command below):
 ```
 block out proto tcp from any to any port 80
 ```
-3. Edit `/etc/pf.conf` to reference the anchor file by adding the following lines:
+```sh
+echo 'block out proto tcp from any to any port 80' | sudo tee /etc/pf.anchors/block-http
+```
+3. Edit `/etc/pf.conf` (for example `sudo nano /etc/pf.conf`) and add the following lines **at the end of the file**. PF requires filter rules to come after the existing `scrub-anchor`, `nat-anchor`, and `rdr-anchor` lines, so adding them at the top produces a "rules must be in order" error.
 ```
 anchor "block-http"
 load anchor "block-http" from "/etc/pf.anchors/block-http"
 ```
-4. Open a Terminal window and validate your changes with the following command:
+4. Validate your changes with the following command:
 ```sh
 sudo pfctl -nf /etc/pf.conf
 ```
-> The `-n` option performs a dry run, validating the configuration without loading it.
+> The `-n` option performs a dry run, validating the configuration without loading it. No output other than the warnings mentioned above means the syntax is valid.
 
-5. From the CLI Terminal, load the configuration and enable the packet filter:
+5. Load the configuration and enable the packet filter:
 ```sh
 sudo pfctl -f /etc/pf.conf
 sudo pfctl -e
 ```
-6. You can verify the loaded packet-filter rules with the following command:
+6. Verify the loaded packet-filter rules. The main ruleset only shows a reference to your anchor (`anchor "block-http" all`). To see the rule inside the anchor, add `-a block-http`:
 ```sh
 sudo pfctl -s rules
+sudo pfctl -a block-http -s rules
 ```
+You should see `block drop out proto tcp from any to any port = 80`.
+
 7. Open your browser and attempt to browse to [http://echo.dicax.org](http://echo.dicax.org). (Be sure to specify HTTP, not HTTPS.) The request should fail.
+> **Important:** Current versions of Safari and Chrome automatically upgrade `http://` URLs to `https://` when the site supports HTTPS. If you use either of them normally, the page will still load over port 443 and the block will appear not to work. Check the address bar: if it shows `https://` and the page reports `CLIENT-PROTO: https`, the browser upgraded the request. To test real HTTP, do one of the following:
+> * Use `curl`, which never upgrades: `curl -v --max-time 10 http://echo.dicax.org` (expect `Connection timed out`).
+> * Start a separate Chrome profile with HTTPS-Upgrades disabled (expect `ERR_INTERNET_DISCONNECTED` or `ERR_CONNECTION_TIMED_OUT`):
+> ```sh
+> open -na "Google Chrome" --args --user-data-dir=/tmp/chrome-hw3 --disable-features=HttpsUpgrades http://echo.dicax.org
+> ```
+
 8. Open your browser and attempt to browse to [https://echo.dicax.org](https://echo.dicax.org) (with HTTPS). The request should succeed.
-9. Disable your packet filter rule by removing it or commenting it in `/etc/pf.conf`. Then reload the configuration:
+9. Disable your packet filter rule by commenting out (prefix with `#`) or removing the two lines you added to `/etc/pf.conf`. Then reload the configuration:
 ```sh
-sudo pfctl -f /etc/pf.conf`
+sudo pfctl -f /etc/pf.conf
 ```
-10. In your browser, verify that HTTP (unencrypted) access has been restored.
+> Alternatively, you can flush only the rules in your anchor without editing `/etc/pf.conf`: `sudo pfctl -a block-http -F rules`.
 
-> Depending on the macOS version and configuration, custom packet-filter settings may not persist across a reboot or system update. If you want the settings to be loaded automatically, you may need to use a LaunchDaemon or another startup mechanism.
+10. In your browser, verify that HTTP (unencrypted) access has been restored. The page should now report `CLIENT-PROTO: http`.
+11. Clean up by restoring the original configuration. If PF was disabled before you started, disable it again:
+```sh
+sudo cp /etc/pf.conf.backup /etc/pf.conf
+sudo rm /etc/pf.anchors/block-http
+sudo pfctl -f /etc/pf.conf
+sudo pfctl -d
+```
 
-Proceed to the Writeup and Submission section below to complete this homework.
+> Depending on the macOS version and configuration, custom packet-filter settings may not persist across a reboot or system update, and macOS updates may replace `/etc/pf.conf`. If you want the settings to be loaded automatically, you may need to use a LaunchDaemon or another startup mechanism.
+
+Proceed to the **Writeup and Submission** section below to complete this homework.
 
 ## Linux
 
