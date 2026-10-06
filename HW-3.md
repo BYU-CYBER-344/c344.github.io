@@ -100,29 +100,58 @@ Proceed to the Writeup and Submission section below to complete this homework.
 
 If you use **Linux** for your daily driver, you should be accustomed to adapting instructions to your platform. You will need to do the same here. However, you will have an advantage on **Lab 3** which follows since that will all be on a Linux VM.
 
-Here is some info to get you started:
-* The host firewall on Linux **NetFilter** which is in the kernel and always present.
-* You configure the host firewall with **UCW (Uncomplicated Firewall)** which must be installed:
-    * Debian/Ubuntu: `sudo apt install ufw`
-    * Arch: `sudo pacman -S ufw`
-* Once installed, enable UFW with:
-```sh
-sudo ufw enable
-```
-* You can check its status with:
+*These instructions were validated with UFW 0.36 on Ubuntu 24.04. To perform these tasks, you need `sudo` (administrator) access. If you do not run Linux natively, you can use a Linux virtual machine.*
+
+The host firewall on Linux is **Netfilter**, which is built into the kernel and always present. Netfilter rules are managed by lower-level tools (`iptables` or `nftables`), and most people configure them through a friendlier front end. On Ubuntu and Debian, that front end is **UFW (Uncomplicated Firewall)**. (Fedora and RHEL use **firewalld** instead. If your distribution uses firewalld, either adapt these steps with `firewall-cmd` or disable firewalld before installing UFW so the two do not conflict.)
+
+Install UFW if it is not already present:
+* Debian/Ubuntu: `sudo apt install ufw`
+* Arch: `sudo pacman -S ufw`
+
+> **Remote machines:** if you are connected to the machine over SSH, allow SSH **before** enabling UFW, or you will lock yourself out: `sudo ufw allow OpenSSH`.
+
+Check UFW's status before you change anything. On a fresh install it reports `Status: inactive`, meaning UFW is not filtering anything yet:
+
 ```sh
 sudo ufw status verbose
 ```
 
-Explore UFW configuration and options sufficiently to answer the associated submission questions.
+Enable UFW and check its status again:
+
+```sh
+sudo ufw enable
+sudo ufw status verbose
+```
+
+Take note of the following:
+
+* The `Default:` line shows the actions applied to traffic that matches no rule. UFW's defaults are `deny (incoming), allow (outgoing), deny (routed)`. These defaults are stored in `/etc/default/ufw`.
+* `sudo ufw app list` lists the **application profiles** (for example `OpenSSH`, `Apache`, `Nginx Full`) that you can allow or deny by name instead of by port. Profiles live in `/etc/ufw/applications.d/`.
+* `sudo ufw status numbered` lists the active rules with numbers. Outbound rules are marked `(out)`. Each rule is usually created twice, once for IPv4 and once for IPv6 (`(v6)`).
+* `sudo ufw show added` lists the rules you have added in the same syntax you used to create them.
+* (Optional) To see the Netfilter rules that UFW generates, run `sudo iptables -S ufw-user-output` (outbound) or `sudo iptables -S ufw-user-input` (inbound).
 
 Use UFW to do the following:
-1. Add a rule that blocks outbound TCP traffic to port 80, the standard port for HTTP.
-2. Open your browser and attempt to browse to [http://echo.dicax.org](http://echo.dicax.org) (Be sure to specify HTTP, not HTTPS.) It should fail.
-3. Open your browser and attempt to browse to [https://echo.dicax.org](https://echo.dicax.org) (with HTTPS). It should succeed.
-4. Disable your new rule and attempt access those same URLs.
 
-Proceed to the Writeup and Submission section below to complete this homework.
+1. Add a rule that blocks outbound TCP traffic to port 80, the standard port for HTTP:
+```sh
+sudo ufw deny out 80/tcp
+sudo ufw status numbered
+```
+You should see `80/tcp DENY OUT Anywhere (out)` and the same rule for `(v6)`. (`deny` silently drops the packets, so connections time out. `reject` instead sends an immediate error back to the application.)
+
+2. Open your browser and attempt to browse to [http://echo.dicax.org](http://echo.dicax.org). (Be sure to specify HTTP, not HTTPS.) The request should fail.
+> Current versions of Chrome and Firefox may automatically upgrade `http://` URLs to `https://`, which would make the page load over port 443 even though port 80 is blocked. If the address bar shows `https://` or the page reports `CLIENT-PROTO: https`, the browser upgraded the request. Test with `curl -v --max-time 10 http://echo.dicax.org` (expect `Connection timed out`), or disable the HTTPS-only/upgrade setting in your browser.
+
+3. Open your browser and attempt to browse to [https://echo.dicax.org](https://echo.dicax.org) (with HTTPS). The request should succeed.
+4. UFW does not have a "disable rule" command, so remove the rule instead. You can delete it by its specification or by its number from `sudo ufw status numbered` (delete the higher-numbered `(v6)` rule first, because the numbers shift after each deletion):
+```sh
+sudo ufw delete deny out 80/tcp
+```
+5. Attempt to access the same URLs again. Both requests should succeed, and the page should report `CLIENT-PROTO: http` for the HTTP URL.
+6. (Optional) Return UFW to its original state. If it was inactive when you started, run `sudo ufw disable`.
+
+Proceed to the **Writeup and Submission** section below to complete this homework.
 
 ## Writeup and Submission
 
