@@ -2,7 +2,7 @@
 course: Capstone
 session: CYBER
 title: "Cybersecurity Workshop"
-image: byu-cybersecurity.webp
+image: images/byu-cybersecurity.webp
 ---
 
 * Slides will be posted on Box.com (Minus the workshop annotations.)
