@@ -32,7 +32,7 @@ Your program will be based on the `fork()` and `exec()` functions. There are man
 
 In this lab we will do the following:
 * Create a pipe.
-* Create child using fork.
+* Create a child using fork.
 * In the child, connect stdout to the write end of the pipe.
 * In the child, exec to the `ps` program (with appropriate arguments).
 * Create another child using fork.
@@ -62,8 +62,8 @@ Here are the details:
 8. Return 0 meaning success.
 
 ### Tips
-* Read the documentation for each functioning carefully.
-* The first argument to execlp() is the name of the program to run. The second argument is the name of what was run that is provided to the program. So, the first two arguments are the same. Only after that do you provide other arguments such as `-ef` or `^root`.
+* Read the documentation for each function carefully.
+* The first argument to execlp() is the name of the program to run. The second argument is the name of what was run that is provided to the program. So, the first two arguments are the same. Only after that do you provide other arguments such as `-ef` or `^root`. Since execlp() takes a variable number of arguments, you have to let it know when the arguments are finished. So, the last argument must be `NULL`.
 * `waitpid` requires three arguments. For the second and third you can just provide defaults, `NULL` and `0`.
 
 ## Error Handling
