@@ -2,7 +2,7 @@
 title: "HW 5: Synchronization Primitives"
 ---
 
-In this lab you will start with a C program similar to the one we used in class. It launches two threads. One that prints the numbers from 0 to 25 and the other which prints the letters from A to Z. It has two issues that lead to non-deterministic results. One is that the letters and numbers can be interleaved since both threads are running at the same time. The other is that which thread starts first is indeterminate.
+In this activity you will start with a C program similar to the one we used in class. It launches two threads. One that prints the numbers from 0 to 25 and the other which prints the letters from A to Z. It has two issues that lead to non-deterministic results. One is that the letters and numbers can be interleaved since both threads are running at the same time. The other is that which thread starts first is indeterminate.
 
 Of course, this is an artificial example. You could avoid all contention by not creating new threads and simply calling the two functions in order as follows:
 
