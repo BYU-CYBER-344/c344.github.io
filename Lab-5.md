@@ -171,7 +171,7 @@ In the log file use case it should not happen. Linux does not permit signals to 
 
 ## Submission and Scoring
 
-To complete this lab, ensure there is a comment at the top of your source code with your name, the date, and the title of the homework. sThen submit the source to LearningSuite.
+To complete this lab, ensure there is a comment at the top of your source code with your name, the date, and the title of the homework. Then submit the source to LearningSuite.
 
 Scoring is as follows:
 
