@@ -12,7 +12,7 @@ In this lab you will implement a `WriteToLog()` function that writes an entry to
 * Apply file-related synchronization primitives.
 * Learn to read and interpret function call documentation.
 
-> **AI Reminder:** With the right prompt you could probably get an AI to write the WriteToLog() function for you. Doing so would violate course policies and would impair your learning (which is why that's the policy). Nevertheless, you may ask AI to explain how the system functions you will use operate and even have it give examples of how to call them. Using AI as a tutor is acceptable so long as you compose the prompts in you own words, do not have it write the actual code of your lab, and never paste or submit course content to AI (other than review questions). Your focus should be on learning how these system calls work, not on just getting the assignment done.
+> **AI Reminder:** With the right prompt you could probably get an AI to write the WriteToLog() function for you. Doing so would violate course policies and would impair your learning (which is why that's the policy). Nevertheless, you may ask AI to explain how the system functions you will use operate and even have it give examples of how to call them. Using AI as a tutor is acceptable so long as you compose the prompts in your own words, do not have it write the actual code of your lab, and never paste or submit course content to AI (other than review questions). Your focus should be on learning how these system calls work, not on just getting the assignment done.
 
 ## Programming Reference
 
@@ -55,19 +55,32 @@ write(fd, prefix, prefixlen);
 ```
 
 **Source**
+
+Add these include files:
+```c
+#include <unistd.h>
+#include <time.h>
+#include <stdio.h>
+```
+
+Insert this function:
 ```c
 int GetPrefix(char* buf, int buflen) {
     // Get the process ID
     long pid = (long)getpid();
 
-    // Get the the current time in structured format
+    // Get the current time in structured format
     time_t now = time(NULL);
-    struct tm time;
-    gmtime_r(&now, &time);
+    struct tm tm_now;
+    gmtime_r(&now, &tm_now);
 
     // Formatted write. (Memory safe so long as the provided buflen is correct.)
-    return snprintf(buf, buflen, "%04d-%02d-%02dT%02d:%02d:%02d (%ld): ",
-        time.tm_year+1900, time.tm_mon+1, time.tm_mday, time.tm_hour, time.tm_min, time.tm_sec, pid);
+    int cb = snprintf(buf, buflen, "%04d-%02d-%02dT%02d:%02d:%02d (%ld): ",
+        tm_now.tm_year+1900, tm_now.tm_mon+1, tm_now.tm_mday, tm_now.tm_hour, tm_now.tm_min, tm_now.tm_sec, pid);
+
+    // snprintf returns the number of bytes required, not the actual number of bytes, when the buffer is too small.
+    // Therefore, return the truncated length if the buffer is too small.
+    return (cb < buflen) ? cb : buflen-1;
 }
 ```
 
@@ -82,7 +95,7 @@ Your first, "naive" version of the app will write to the log but will not preven
 4. Create a string constant for the name of your log file. (E.g. `lab5.log`).
 5. Paste in the `GetPrefix` function from above.
 6. Write a function with this declaration: `void WriteToLog(const char* message)`
-    * Open the log file with appropriate `O_` flags for write-only and create if it doesn't exist. `mode` should use the correct `S_` flags for user, group, and other permissions. In choosing your `S_` flags, consider how the file will be used and, therefore, who should have read and write permissions. Use the documentation for `open()` to get your arguments right.
+    * Open the log file with appropriate `O_` flags for write-only and to create the file if it does not exist. For `mode` specify appropriate `S_` flags for user, group, and other permissions. In choosing your `S_` flags, consider how the file will be used and, therefore, who should have read and write permissions. Use the documentation for `open()` to get your arguments right. Remember that multiple `O_` or `S_` flags can be combined using the "`|`" binary OR operator.
     * Seek to the end of the file.
     * Use `GetPrefix()` to get your log entry prefix.
     * Write the prefix to the open file.
@@ -91,6 +104,8 @@ Your first, "naive" version of the app will write to the log but will not preven
     * Close the file.
 7. Write your main function.
     * It should call `WriteToLog()` three times with the following messages: "App Started", "Processing data", "App exiting".
+
+> The `mode` argument to `open()` is not the final permission set. The kernel clears any bits that are set in the `umask` of the process. A typical umask will remove write access from the group and others even if you ask for it. Also, `mode` is only effective when the file is created. If the log file already exists then it is ignored.
 
 ### Testing
 
@@ -104,7 +119,7 @@ for i in {1..5}; do ./a.out & done; wait
 
 If you used something other than the default executable filename substitute it for `a.out`.
 
-Look at your log file. Most likely, it's garbled with the different log entries mixed together and overwriting each other. However, since this is a race condition the results are non-deterministic. You could get clean output. If so, consider running more than concurrent instances. Or, maybe, just write more for the fun of it to see how messy things get.
+Look at your log file. Most likely, it's garbled with the different log entries mixed together and overwriting each other. However, since this is a race condition the results are non-deterministic. You could get clean output. If so, consider running more concurrent instances. Or, maybe, just run more for the fun of it to see how messy things get.
 
 Consider how this gets messed up. `WriteToLog()` opens the file, seeks to the end, writes three times, and then closes the file. Between any two of those operations another process could work on that same file. So, for example, Process A could seek to the end, then Process B writes to the file. So, by the time Process A calls `write()`, the file pointer is no longer at the end and it overwrites the text from Process B. And with three calls to `write()` the opportunity for interference is multiplied.
 
@@ -130,33 +145,33 @@ Try more instances, make sure it works correctly.
 
 Now that your program is working, here are a few important concepts that are not obvious from what you have just done. These concepts are **fair game** in future quizzes or exams so be sure you understand them.
 
-### Short Writes
-
-Your code, as written, has a potential bug. If a signal is sent to your application while a write operation is underway, the write operation will return with the number of bytes written being fewer than were requested. And if a signal comes before any bytes are written it can return an error (-1) with `errno` (error number) being `EINTR`. This is known as a "short write" or "partial write". When that happens, the program should simply loop and write the remaining bytes, or all of the bytes in the case of `EINTR`. For this reason, many programs use a function called "write_all", "full_write", "safe_write", or something similar.
-
-Since your program does not have any signal handlers and the writes are below the "very large write limit" (roughly 4 GiB) the only reason you would get a short write is if the disk was full or in the event of a hardware failure. Therefore, it is not an issue in your particular case but it is an important consideration when writing reliable code.
-
 ### Linux File Locks Are Advisory
 
-Under Linux and related operating systems, file locks are advisory. That means that the operating system does not enforce them. Your locks worked in this application because all programs accessing the file followed the lock pattern. But another program that didn't use locks could still corrupt the file. There is also no coordination between file locks (using `flock()`) and byte-range locks (using `fcntl()`). If one program uses file locks and another uses byte-range locks there would be no synchronization. One process can even delete a file that is open in another process. When such a delete occurs, the file is immediately removed from directory listings but it remains open and functional for the process that has it open and it only goes away when the file descriptor is closed.
+Under Linux and related operating systems, file locks are advisory. That means that the operating system does not enforce them. Your locks worked in this application because all programs accessing the file followed the lock pattern. But another program that didn't use locks could still corrupt the file. There is also no coordination between file locks (using `flock()`) and byte-range locks (using `fcntl()`). If one program uses file locks and another uses byte-range locks there would be no synchronization. One process can even delete a file that is open in another process. When such a delete occurs, the file is immediately removed from directory listings but it remains open and functional for the process that has it open and it only goes away when the last file descriptor is closed.
+
+> There is an exception to the above. When the file is accessed over the network, [NFS (Network File System)](https://en.wikipedia.org/wiki/Network_File_System) does not implement whole file locks so `flock()` is implemented using a byte-range lock. In that case `fcntl()` and `flock()` will interact.
 
 This stands in stark contrast with Windows which enforces locks. At the time you open a file on Windows you indicate which permissions you are willing to share (read, write, and delete). If another process attempts to perform an action and the file is open without that requisite permission being shared, then the action will fail with an error.
 
+### The O_APPEND Alternative
+
+If you open the file with the `O_APPEND` flag then every `write()` will automatically be made at the end of the file. Furthermore, the seek to the end and the subsequent write are *atomic*, meaning that another process cannot insert a write between the seek and the write. This means that a robust logger could be written without file locks. If you open the file with O_APPEND and you compose the entire log entry in one text buffer before writing it all out with one call to `write()` then the log entry will be clean.
+
+The `O_APPEND` strategy can fail if the file is being accessed over the network. [NFS (Network File System)](https://en.wikipedia.org/wiki/Network_File_System) does not directly implement the `O_APPEND` function. Rather, the local operating system emulates `O_APPEND` by prefixing every write with a seek to the end of the file. Thus, when writing to a network file, the `write()` operation is no longer atomic. If the log file is on a network share, a file lock would be required even when using `O_APPEND`.
+
 ### Buffered Files
 
-In all of these labs, we are striving to call the operating system directly whenever possible. The standard C library includes buffered file functions like `fopen()`, `fread()`, `fwrite()`, and `fprintf()`. These functions insert an in-memory buffer between the operations and the actual file. Doing so makes them perform much better than the direct operating system calls when doing many short reads and writes. Additionally, the buffered file calls automatically handle short write situations so they are more robust under signalling conditions. However, when you want to be sure data have been written out to physical storage, you must call `fflush()` after a write or series of writes. Of course, `fclose()` automatically flushes before closing the file.
+In all of these labs, we are striving to call the operating system directly whenever possible. The standard C library includes buffered file functions like `fopen()`, `fread()`, `fwrite()`, and `fprintf()`. These functions insert an in-memory buffer between the operations and the actual file. Doing so makes them perform much better than the direct operating system calls when doing many short reads and writes. Additionally, the buffered file calls automatically handle partial write situations (see below) so they are more robust under signalling conditions. However, when you want to be sure data have been written out to the kernel, you must call `fflush()` after a write or series of writes. Of course, `fclose()` automatically flushes before closing the file.
 
-### Using O_APPEND Can Help
+### Short Writes
 
-If you open the file with the `O_APPEND` flag then every `write()` will automatically be made at the end of the file. Furthermore, the seek to the end and the subsequent write are *atomic*, meaning that another process cannot insert a write between the seek and the write. This suggests that a robust logger could be written without file locks. If you open the file with O_APPEND and you compose the entire log entry in one text buffer before writing it all out with one call to `write()` then the majority of the time the log entry will be clean.
+If a signal is handled by an application while a write operation is underway, the write operation will return with the number of bytes written being fewer than were requested. And if a signal is handled before any bytes are written it can return an error (-1) with `errno` (error number) being `EINTR`. This is known as a "short write" or "partial write". When that happens, the program should simply loop and write the remaining bytes, (all of the bytes in the case of `EINTR`). For this reason, many programs use a function called "write_all", "full_write", "safe_write", or something similar.
 
-There are two cases where the `O_APPEND` strategy can fail. One is the *short write* situation described above. If part of the log entry is written, then a signal interrupts the write, and then the balance is written, another process could place text between the two parts. The other case is when the file is on another computer. [NFS (Network File System)](https://en.wikipedia.org/wiki/Network_File_System) is the primary file sharing protocol for Linux and other Unix-type operating systems. It does not have an `O_APPEND` equivalent so the local operating system emulates that by prefixing every write with a seek to the end of the file. Thus, when writing to a network file, the `write()` operation is no longer atomic.
-
-Thus, even when using `O_APPEND` a file lock is still needed to guarantee that all log writes occur cleanly.
+In the log file use case it should not happen. Linux does not permit signals to interrupt file writes on local file systems and typical NFS mounts. Where short writes *can* happen is if disk is full, disk quotas are exceeded, or the file grows beyond the maximum size. In those cases, repeated attempts to write the balance of the buffer will fail with corresponding error codes. So, those are problems that repeated writes will not address. However, signals can interrupt writing to a pipe. And there are some unusual network configurations, such as NFS soft mounts, that can result in short writes. So robust code, intended to be used with a variety of conditions should address the short write possibility.
 
 ## Submission and Scoring
 
-To complete this lab, ensure there is a comment at the top of your source code with your name, the date, and the title of the homework. Then submit the source to LearningSuite.
+To complete this lab, ensure there is a comment at the top of your source code with your name, the date, and the title of the homework. sThen submit the source to LearningSuite.
 
 Scoring is as follows:
 
@@ -168,5 +183,4 @@ Scoring is as follows:
 
 ## Extra Credit
 
-* [8 Points] Handle short writes properly. This includes partial writes (when `write()` returns fewer than the number of bytes you indicated) and `EINTR` errors (when the write was interrupted before starting).
-* [8 Points] Use `O_APPEND` when opening the file, omit the `lseek()` call, and compose the entire log entry into a single buffer which is written in a single write call. This should reduce the need for `flock()` to just the short write and NFS situations as described in **Commentary**.
+* [10 Points] Write a new version of `WriteToLog()` called `AppendToLog()` that uses the `O_APPEND` option as described in **Commentary**. The `open()` call should include the `O_APPEND` flag. Omit the `lseek()` call and all file locking. Compose the entire log entry into one buffer which is written in a single write call. Test this to show that log writes do not interfere with each other. Your code must accommodate messages of any length, be protected against buffer overflows, and must not have memory leaks. If this is in your initial submission, be sure that your source code includes both the original `WriteToLog()` and the `AppendToLog()` alternative so that we can score both approaches.
