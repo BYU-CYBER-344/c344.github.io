@@ -89,7 +89,7 @@ Test the program. It should give you the same output as this command: `ps -ef | 
 
 ## Submission and Scoring
 
-To complete this homework, insert a comment at the top of your source code with your name, the date, and the title of the homework. Then submit the source to LearningSuite.
+To complete this lab, insert a comment at the top of your source code with your name, the date, and the title of the homework. Then submit the source to LearningSuite.
 
 Scoring is as follows:
 
